@@ -11,7 +11,14 @@ class MyHostelsLoaded extends MyHostelsState {
   MyHostelsLoaded(this.hostels);
 }
 
+class MyHostelsDeleted extends MyHostelsState {}
+
 class MyHostelsError extends MyHostelsState {
   final String message;
   MyHostelsError(this.message);
+}
+
+class MyHostelsDeletedError extends MyHostelsState {
+  final String message;
+  MyHostelsDeletedError(this.message);
 }

@@ -11,7 +11,6 @@ import 'package:packinh/features/app/pages/my_hostel/presentation/widgets/add_ho
 import 'package:packinh/features/app/pages/my_hostel/presentation/widgets/add_hostel/hostel_form_controller.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/widgets/add_hostel/image_section.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/widgets/add_hostel/room_details_section.dart';
-
 import '../provider/bloc/add_hostel/add_hostel_bloc.dart';
 import '../provider/bloc/add_hostel/add_hostel_state.dart';
 import '../provider/bloc/my_hostel/my_hostel_bloc.dart';
@@ -39,7 +38,7 @@ class _AddHostelScreenState extends State<AddHostelScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => getIt<AddHostelBloc>()),
-        BlocProvider(create: (context) => getIt<MyHostelsBloc>()), // Provide MyHostelsBloc
+        BlocProvider(create: (context) => getIt<MyHostelsBloc>()),
         BlocProvider(create: (context) => LocationCubit(GeolocationService())),
       ],
       child: BlocListener<AddHostelBloc, AddHostelState>(
@@ -49,12 +48,11 @@ class _AddHostelScreenState extends State<AddHostelScreen> {
               const SnackBar(content: Text('Adding hostel...')),
             );
           } else if (state is AddHostelSuccess) {
-            // Dispatch FetchMyHostels to refresh the list
-            context.read<MyHostelsBloc>().add(FetchMyHostels(CurrentUser().uId ?? ''));
+            Navigator.pop(context,true);
+            // context.read<MyHostelsBloc>().add(FetchMyHostels(CurrentUser().uId ?? ''));
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Hostel added successfully!')),
             );
-            Navigator.pop(context);
           } else if (state is AddHostelError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),

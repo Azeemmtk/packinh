@@ -18,4 +18,24 @@ class HostelRepositoryImpl implements HostelRepository {
   Future<Either<Failure, List<HostelEntity>>> getHostelsByOwnerId(String ownerId) async {
     return await remoteDataSource.getHostelsByOwnerId(ownerId);
   }
+
+  @override
+  Future<Either<Failure, void>> deleteHostel(String hostelId) async{
+    try{
+      await remoteDataSource.deleteHostel(hostelId);
+      return Right(null);
+    } catch (e){
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateHostel(HostelEntity hostel) async {
+    try {
+      await remoteDataSource.updateHostel(hostel);
+      return Right(null);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

@@ -1,24 +1,26 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../../core/services/current_user.dart';
-import '../../../../../../core/services/local_storage_service.dart';
+import 'package:packinh/core/services/current_user.dart';
 import '../../../../domain/usecase/sign_in_with_email.dart';
 import '../../../../domain/usecase/sign_up_with_email.dart';
+import '../../../../domain/usecase/reset_password.dart';
 import 'email_auth_event.dart';
 import 'email_auth_state.dart';
 
 class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
   final SignInWithEmail signInWithEmail;
   final SignUpWithEmail signUpWithEmail;
-  final LocalStorageService localStorageService;
+  final ResetPassword resetPassword;
 
   EmailAuthBloc({
     required this.signInWithEmail,
     required this.signUpWithEmail,
-    required this.localStorageService
+    required this.resetPassword,
   }) : super(const EmailAuthInitial()) {
     on<EmailAuthSignIn>(_onSignInWithEmail);
     on<EmailAuthSignUp>(_onSignUpWithEmail);
     on<EmailAuthSendPasswordReset>(_onSendPasswordReset);
+    on<EmailAuthUpdatePassword>(_onUpdatePassword);
+    on<EmailAuthReset>(_onReset); // Add reset event handler
   }
 
   Future<void> _onSignInWithEmail(
@@ -28,12 +30,11 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
         SignInParams(email: event.email, password: event.password));
     result.fold(
           (failure) => emit(EmailAuthError(message: failure.message)),
-          (user) async {
+          (user) {
         print('Email sign-in success ${user.email}');
         CurrentUser().uId = user.uid;
         CurrentUser().name = user.name;
         emit(EmailAuthAuthenticated(user: user));
-        await localStorageService.saveUserId(user.uid);
       },
     );
   }
@@ -59,8 +60,27 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
   Future<void> _onSendPasswordReset(
       EmailAuthSendPasswordReset event, Emitter<EmailAuthState> emit) async {
     emit(const EmailAuthLoading());
-    // Assuming a use case for sending password reset email exists
-    // Implement password reset logic here
-    emit(EmailAuthPasswordResetSent(email: event.email));
+    final result = await resetPassword(ResetPasswordParams(email: event.email));
+    result.fold(
+          (failure) => emit(EmailAuthError(message: failure.message)),
+          (_) => emit(const EmailAuthPasswordResetSent()),
+    );
+  }
+
+  Future<void> _onUpdatePassword(
+      EmailAuthUpdatePassword event, Emitter<EmailAuthState> emit) async {
+    emit(const EmailAuthLoading());
+    final result = await resetPassword(ResetPasswordParams(
+      uid: event.uid,
+      newPassword: event.newPassword,
+    ));
+    result.fold(
+          (failure) => emit(EmailAuthError(message: failure.message)),
+          (_) => emit(const EmailAuthPasswordUpdated()),
+    );
+  }
+
+  void _onReset(EmailAuthReset event, Emitter<EmailAuthState> emit) {
+    emit(const EmailAuthInitial());
   }
 }

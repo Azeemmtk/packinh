@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:packinh/core/di/injection.dart';
 import 'package:packinh/core/services/current_user.dart';
 import 'package:packinh/core/utils/validators.dart';
+import 'package:packinh/features/app/pages/my_hostel/presentation/provider/bloc/my_hostel/my_hostel_bloc.dart';
+import 'package:packinh/features/app/pages/my_hostel/presentation/provider/bloc/my_hostel/my_hostel_event.dart';
 import 'package:uuid/uuid.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/dataSourse/cloudinary_data_source.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
@@ -181,6 +183,7 @@ class HostelFormController {
         );
 
         context.read<AddHostelBloc>().add(SubmitHostelEvent(hostel));
+        context.read<MyHostelsBloc>().add(FetchMyHostels(CurrentUser().uId?? ''));
       } else {
         context.read<AddHostelBloc>().add(AddHostelErrorEvent('Please fix image errors'));
       }

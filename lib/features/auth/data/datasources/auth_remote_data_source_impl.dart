@@ -135,12 +135,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> sendPasswordResetEmail(String email) async {
     try {
+      print('Attempting to send password reset email for: $email');
       await firebaseAuth.sendPasswordResetEmail(email: email);
+      print('Password reset email sent successfully for: $email');
     } on FirebaseAuthException catch (e) {
+      print('FirebaseAuthException in sendPasswordResetEmail: ${e.code} - ${e.message}');
       throw AuthException(_getAuthErrorMessage(e.code));
     } catch (e) {
-      throw AuthException(
-          'Failed to send password reset email: ${e.toString()}');
+      print('Error in sendPasswordResetEmail: ${e.toString()}');
+      throw AuthException('Failed to send password reset email: ${e.toString()}');
     }
   }
 
@@ -333,4 +336,27 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw AuthFailure(e.toString());
     }
   }
+
+  @override
+  Future<void> updateUserPassword(String uid, String newPassword) async {
+    try {
+      final user = firebaseAuth.currentUser;
+      if (user == null || user.uid != uid) {
+        throw const AuthException('User not authenticated or UID mismatch');
+      }
+      await user.updatePassword(newPassword);
+      print('Password updated successfully for UID: $uid');
+    } on FirebaseAuthException catch (e) {
+      print('FirebaseAuthException in updateUserPassword: ${e.code} - ${e.message}');
+      throw AuthException(_getAuthErrorMessage(e.code));
+    } catch (e) {
+      print('Error in updateUserPassword: ${e.toString()}');
+      throw AuthException('Failed to update password: ${e.toString()}');
+    }
+  }
+
+
+
+
+
 }

@@ -142,4 +142,30 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(AuthFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> sendPasswordResetEmail(String email) async {
+    try {
+      await remoteDataSource.sendPasswordResetEmail(email);
+      return const Right(null);
+    } on AuthException catch (e) {
+      return Left(AuthFailure(e.message));
+    } catch (e) {
+      return Left(
+          AuthFailure('Failed to send password reset email: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUserPassword(
+      String uid, String newPassword) async {
+    try {
+      await remoteDataSource.updateUserPassword(uid, newPassword);
+      return const Right(null);
+    } on AuthException catch (e) {
+      return Left(AuthFailure(e.message));
+    } catch (e) {
+      return Left(AuthFailure('Failed to update password: ${e.toString()}'));
+    }
+  }
 }
