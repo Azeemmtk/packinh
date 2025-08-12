@@ -9,3 +9,9 @@ class UpdateHostelSubmitEvent extends UpdateHostelEvent {
 
   const UpdateHostelSubmitEvent(this.hostel);
 }
+
+class UpdateHostelErrorEvent extends UpdateHostelEvent {
+  final String message;
+
+  const UpdateHostelErrorEvent(this.message);
+}

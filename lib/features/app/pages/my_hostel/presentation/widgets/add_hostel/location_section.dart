@@ -59,10 +59,13 @@ class LocationSection extends StatelessWidget {
                     height: 30, // optional
                     width: 30, // optional
                   ),
-                  width10,
                   TextButton(
                     onPressed: () => context.read<LocationCubit>().fetchCurrentLocation(),
-                    child: const Text('Select location'),
+                    child: const Text('Select location', style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: customGrey
+                    ),),
                   ),
                 ],
               ),

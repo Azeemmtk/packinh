@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/features/app/Navigation/cubit/bottom_nav_cubit.dart';
-import 'package:packinh/features/app/pages/account/presentation/account_screen.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/screens/my_hostels_screen.dart';
 import 'package:packinh/features/app/pages/wallet/presentation/wallet_screen.dart';
 
 import '../../../../../core/services/current_user.dart';
 import '../../../pages/Occupants/presentation/occupants_screen.dart';
+import '../../../pages/account/presentation/screens/account_screen.dart';
 import '../../../pages/home/presentation/screen/home_screen.dart';
 import '../../../pages/my_hostel/presentation/provider/bloc/my_hostel/my_hostel_bloc.dart';
 import '../../../pages/my_hostel/presentation/provider/bloc/my_hostel/my_hostel_event.dart';
@@ -45,10 +45,8 @@ class MainScreen extends StatelessWidget {
                   ? FloatingActionButton(
                       backgroundColor: mainColor,
                       onPressed: () async {
-                        print(
-                            "Current logged in UID: ${CurrentUser().uId}===============");
-                        print(
-                            "Current logged in name: ${CurrentUser().name}===============");
+                        print("Current logged in UID: ${CurrentUser().uId}===============");
+                        print("Current logged in name: ${CurrentUser().name}===============");
                         final result = await Navigator.push(
                             context,
                             MaterialPageRoute(

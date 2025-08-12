@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
+import 'package:shimmer/shimmer.dart';
 import 'facility_container.dart';
 
 class HostelFacilityNameSection extends StatelessWidget {
@@ -22,6 +23,24 @@ class HostelFacilityNameSection extends StatelessWidget {
             width: double.infinity,
             height: height * 0.3,
             fit: BoxFit.cover,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) {
+                // Image is loaded
+                return child;
+              }
+              // Show shimmer while loading
+              return
+                Shimmer.fromColors(
+                  baseColor: secondaryColor,
+                  direction: ShimmerDirection.ltr,
+                  highlightColor: mainColor,
+                  child: Container(
+                    width: double.infinity,
+                    height: 170,
+                    color: Colors.white,
+                  ),
+                );
+            },
             errorBuilder: (context, error, stackTrace) => Container(
               height: height * 0.3,
               color: textFieldColor,

@@ -15,6 +15,7 @@ class AllChatScreen extends StatelessWidget {
           CustomAppBarWidget(title: 'Chat'),
           Expanded(
             child: ListView.builder(
+              padding: EdgeInsets.zero,
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {

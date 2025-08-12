@@ -25,7 +25,8 @@ class HostelDetailsSection extends StatelessWidget {
         const TitleTextWidget(title: 'Hostel Details'),
          SizedBox(height: padding),
         CustomTextFieldWidget(
-          text: 'Name',
+          hintText: 'Name',
+          fieldName: 'Name',
           controller: formController.nameController,
           errorText: formController.nameError,
           validator: Validation.validateName,
@@ -36,7 +37,8 @@ class HostelDetailsSection extends StatelessWidget {
         ),
          SizedBox(height: padding),
         CustomTextFieldWidget(
-          text: 'Contact Number',
+          hintText: 'Contact Number',
+          fieldName: 'Contact Number',
           controller: formController.contactNumberController,
           errorText: formController.contactError,
           validator: Validation.validatePhone,
@@ -48,7 +50,8 @@ class HostelDetailsSection extends StatelessWidget {
         ),
          SizedBox(height: padding),
         CustomTextFieldWidget(
-          text: 'Description',
+          hintText: 'Description',
+          fieldName: 'Description',
           expanded: true,
           controller: formController.descriptionController,
           errorText: formController.descriptionError,
@@ -59,6 +62,10 @@ class HostelDetailsSection extends StatelessWidget {
           },
         ),
          SizedBox(height: padding),
+        Text('Add facilities', style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),),
         FacilitySection(
           facilityController: formController.facilityController,
           facilityError: formController.facilityError,

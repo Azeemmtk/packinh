@@ -4,7 +4,6 @@ import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/widgets/custom_green_button_widget.dart';
 import 'package:packinh/core/widgets/custom_text_field_widget.dart';
-import 'package:packinh/core/widgets/title_text_widget.dart';
 
 class RoomDetailsSection extends StatefulWidget {
   final List<Map<String, dynamic>> rooms;
@@ -27,15 +26,17 @@ class RoomDetailsSection extends StatefulWidget {
 }
 
 class _RoomDetailsSectionState extends State<RoomDetailsSection> {
-  final TextEditingController _typeController = TextEditingController();
   final TextEditingController _countController = TextEditingController();
   final TextEditingController _rateController = TextEditingController();
+  String? _selectedType;
   String? _typeError;
   String? _countError;
   String? _rateError;
 
+  final List<String> _roomTypes = ['Single', '2 Share', '3 Share', 'Shared', 'Dormitory'];
+
   void _showAddRoomDialog() {
-    _typeController.clear();
+    _selectedType = null;
     _countController.clear();
     _rateController.clear();
     _typeError = null;
@@ -45,25 +46,52 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: secondaryColor,
         title: const Text('Add Room'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomTextFieldWidget(
-              text: 'Room Type',
-              controller: _typeController,
-              errorText: _typeError,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Room type is required';
-                }
-                return null;
-              },
-              onChanged: (_) => setState(() => _typeError = null),
+            const Text(
+              'Room Type',
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: mainColor,
+                  borderRadius: BorderRadius.circular(8),
+              ),
+              child: DropdownButton<String>(
+                dropdownColor: Colors.white,
+                value: _selectedType,
+                hint: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text('Select room type',style: TextStyle(color: Colors.white),),
+                ),
+                isExpanded: true,
+                items: _roomTypes.map((String type) {
+                  return DropdownMenuItem<String>(
+                    value: type,
+                    child: Text(type),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedType = newValue;
+                    _typeError = null;
+                  });
+                },
+              ),
+            ),
+            if (_typeError != null)
+              Text(
+                _typeError!,
+                style: const TextStyle(color: Colors.red, fontSize: 12),
+              ),
             height10,
             CustomTextFieldWidget(
-              text: 'Room Count',
+              hintText: '000',
+              fieldName: 'Room Count',
               controller: _countController,
               errorText: _countError,
               keyboardType: TextInputType.number,
@@ -80,7 +108,8 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
             ),
             height10,
             CustomTextFieldWidget(
-              text: 'Room Rate',
+              hintText: '₹₹₹₹',
+              fieldName: 'Room Rate',
               controller: _rateController,
               errorText: _rateError,
               keyboardType: TextInputType.number,
@@ -106,7 +135,7 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
             name: 'Add',
             onPressed: () {
               setState(() {
-                _typeError = _typeController.text.trim().isEmpty ? 'Room type is required' : null;
+                _typeError = _selectedType == null ? 'Room type is required' : null;
                 _countError = _countController.text.isEmpty
                     ? 'Room count is required'
                     : int.tryParse(_countController.text) == null
@@ -120,7 +149,7 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
 
                 if (_typeError == null && _countError == null && _rateError == null) {
                   widget.onAddRoom(
-                    _typeController.text.trim(),
+                    _selectedType!,
                     int.parse(_countController.text),
                     double.parse(_rateController.text),
                   );
@@ -140,13 +169,12 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const TitleTextWidget(title: 'Room Details'),
         height10,
         Center(
           child: SizedBox(
-            width: width * 0.5,
+            width: width * 0.65,
             child: CustomGreenButtonWidget(
-              name: 'Add Room',
+              name: 'Add Room Details',
               color: secondaryMain,
               onPressed: _showAddRoomDialog,
             ),
@@ -164,8 +192,12 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${room['type']} (${room['count']}) - \$${room['rate']}',
-                style: const TextStyle(fontSize: 16),
+                '${room['type']} (${room['count']})',
+                style: const TextStyle(fontSize: 17),
+              ),
+              Text(
+                '₹${room['rate']}',
+                style: const TextStyle(fontSize: 17),
               ),
               IconButton(
                 icon: const Icon(FontAwesomeIcons.trash, size: 16, color: Colors.red),
@@ -183,7 +215,6 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
 
   @override
   void dispose() {
-    _typeController.dispose();
     _countController.dispose();
     _rateController.dispose();
     super.dispose();

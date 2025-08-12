@@ -117,7 +117,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     ),
                     SizedBox(height: height * 0.02),
                     CustomTextFieldWidget(
-                      text: 'New Password',
+                      hintText: 'New Password',
+                      fieldName: 'New Password',
                       isSecure: true,
                       controller: _newPasswordController,
                       errorText: _newPasswordError,
@@ -133,7 +134,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     ),
                     SizedBox(height: height * 0.01),
                     CustomTextFieldWidget(
-                      text: 'Repeat Password',
+                      hintText: 'Repeat Password',
+                      fieldName: 'Repeat Password',
                       isSecure: true,
                       controller: _confirmPasswordController,
                       errorText: _confirmPasswordError,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/constants/colors.dart';
 
@@ -12,7 +13,7 @@ class CustomMyHostelCard extends StatelessWidget {
     required this.rent,
     required this.rating,
     required this.distance,
-    required this.approved, // New field
+    required this.approved,
   });
 
   final String imageUrl;
@@ -21,7 +22,7 @@ class CustomMyHostelCard extends StatelessWidget {
   final int rent;
   final double rating;
   final int distance;
-  final bool approved; // New field
+  final bool approved;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class CustomMyHostelCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withOpacity(0.3),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -42,7 +43,7 @@ class CustomMyHostelCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image Section
+          // Image with shimmer effect
           Stack(
             children: [
               ClipRRect(
@@ -50,11 +51,30 @@ class CustomMyHostelCard extends StatelessWidget {
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
                 ),
-                child: Image.network(
+                child:
+                Image.network(
                   imageUrl,
                   width: double.infinity,
                   height: 170,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      // Image is loaded
+                      return child;
+                    }
+                    // Show shimmer while loading
+                    return
+                      Shimmer.fromColors(
+                        baseColor: secondaryColor,
+                        direction: ShimmerDirection.ltr,
+                        highlightColor: mainColor,
+                      child: Container(
+                        width: double.infinity,
+                        height: 170,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
                   errorBuilder: (context, error, stackTrace) => Container(
                     height: 170,
                     color: textFieldColor,
@@ -66,9 +86,10 @@ class CustomMyHostelCard extends StatelessWidget {
                 top: 8,
                 right: 8,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: approved ? Colors.green : Colors.red,
+                    color: approved ? mainColor : Colors.red,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -79,6 +100,7 @@ class CustomMyHostelCard extends StatelessWidget {
               ),
             ],
           ),
+
           // Content Section
           Padding(
             padding: const EdgeInsets.all(16),

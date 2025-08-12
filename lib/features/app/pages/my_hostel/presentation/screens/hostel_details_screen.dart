@@ -12,90 +12,131 @@ import 'package:packinh/features/app/pages/my_hostel/presentation/widgets/hostel
 import '../provider/bloc/my_hostel/my_hostel_state.dart';
 import '../widgets/hostel_details/description_preview_section.dart';
 import '../widgets/hostel_details/review_room_section.dart';
+import 'hostel_edit_screen.dart';
 
 class HostelDetailsScreen extends StatelessWidget {
-  final HostelEntity hostel;
+  final String hostelId; // Use hostel ID instead of full entity
 
-  const HostelDetailsScreen({super.key, required this.hostel});
+  const HostelDetailsScreen({super.key, required this.hostelId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          CustomAppBarWidget(
-            title: hostel.name,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(padding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    HostelFacilityNameSection(
-                      hostel: hostel,
-                    ),
-                    DescriptionPreviewSection(
-                      description: hostel.description,
-                      ownerName: hostel.ownerName,
-                      contactNumber: hostel.contactNumber,
-                      smallImageUrls: hostel.smallImageUrls,
-                    ),
-                    ReviewRoomSection(
-                      rooms: hostel.rooms,
-                    ),
-                    Row(
+      body: BlocBuilder<MyHostelsBloc, MyHostelsState>(
+        builder: (context, state) {
+          HostelEntity? hostel;
+          if (state is MyHostelsLoaded) {
+            hostel = state.hostels.firstWhere((h) => h.id == hostelId,
+              orElse: () => throw Exception('Hostel not found'),
+            );
+          } else if (state is MyHostelsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is MyHostelsError) {
+            return Center(child: Text(state.message));
+          }
+
+          if (hostel == null) {
+            context
+                .read<MyHostelsBloc>()
+                .add(FetchMyHostels(CurrentUser().uId ?? ''));
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return Column(
+            children: [
+              CustomAppBarWidget(
+                title: hostel.name,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(padding),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Status: ${hostel.approved ? 'Approved' : 'Pending'}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: hostel.approved ? Colors.green : Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        HostelFacilityNameSection(
+                          hostel: hostel,
+                        ),
+                        DescriptionPreviewSection(
+                          description: hostel.description,
+                          ownerName: hostel.ownerName,
+                          contactNumber: hostel.contactNumber,
+                          smallImageUrls: hostel.smallImageUrls,
+                        ),
+                        ReviewRoomSection(
+                          rooms: hostel.rooms,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              'Status: ${hostel.approved ? 'Approved' : 'Pending'}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color:
+                                    hostel.approved ? Colors.green : Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        height20,
+                        CustomGreenButtonWidget(
+                          name: 'Edit details',
+                          onPressed: () async {
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    HostelEditScreen(hostel: hostel!),
+                              ),
+                            );
+                            if (result == true) {
+                              context
+                                  .read<MyHostelsBloc>()
+                                  .add(FetchMyHostels(CurrentUser().uId ?? ''));
+                            }
+                          },
+                        ),
+                        height20,
+                        BlocConsumer<MyHostelsBloc, MyHostelsState>(
+                          listener: (context, state) {
+                            if (state is MyHostelsDeleted) {
+                              Navigator.pop(context);
+                              context
+                                  .read<MyHostelsBloc>()
+                                  .add(FetchMyHostels(CurrentUser().uId ?? ''));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Hostel deleted successfully')),
+                              );
+                            } else if (state is MyHostelsDeletedError) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.message)),
+                              );
+                            }
+                          },
+                          builder: (context, state) {
+                            return CustomGreenButtonWidget(
+                              name: 'Delete',
+                              color: Colors.redAccent,
+                              onPressed: () {
+                                Navigator.pop(context);
+                                context.read<MyHostelsBloc>().add(
+                                    DeleteHostelEvent(hostelId: hostel!.id));
+                              },
+                              isLoading: state is MyHostelsLoading,
+                            );
+                          },
                         ),
                       ],
                     ),
-                    height20,
-                    CustomGreenButtonWidget(
-                      name: 'Edit details',
-                      onPressed: () {
-                        // TODO: Implement edit functionality
-                      },
-                    ),
-                    height20,
-                    BlocConsumer<MyHostelsBloc, MyHostelsState>(
-                      listener: (context, state) {
-                        if (state is MyHostelsDeleted) {
-                          Navigator.pop(context);
-                          context.read<MyHostelsBloc>().add((FetchMyHostels(CurrentUser().uId!)));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Hostel approved successfully')),
-                          );
-                        } else if (state is MyHostelsDeletedError) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.message)),
-                          );
-                        }
-                      },
-                      builder: (context, state) {
-                        return CustomGreenButtonWidget(
-                          name: 'Delete',
-                          color: Colors.redAccent,
-                          onPressed: () {
-                            context.read<MyHostelsBloc>().add(DeleteHostelEvent(hostelId: hostel.id));
-                          },
-                          isLoading: state is MyHostelsLoading,
-                        );
-                      },
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            ],
+          );
+        },
       ),
     );
   }

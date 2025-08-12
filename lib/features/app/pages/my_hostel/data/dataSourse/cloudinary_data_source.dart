@@ -4,7 +4,7 @@ import 'package:packinh/core/error/exceptions.dart';
 import 'package:packinh/core/services/cloudinary_services.dart';
 
 abstract class CloudinaryDataSource {
-  Future<List<Map<String, String>>> uploadImages(List<File?> images);
+  Future<List<Map<String, String>>> uploadImage(List<File?> images);
 }
 
 class CloudinaryDataSourceImpl implements CloudinaryDataSource {
@@ -13,7 +13,7 @@ class CloudinaryDataSourceImpl implements CloudinaryDataSource {
   CloudinaryDataSourceImpl(this.cloudinaryService);
 
   @override
-  Future<List<Map<String, String>>> uploadImages(List<File?> images) async {
+  Future<List<Map<String, String>>> uploadImage(List<File?> images) async {
     try {
       return await cloudinaryService.uploadImage(images);
     } catch (e) {
