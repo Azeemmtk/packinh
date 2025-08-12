@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/services/current_user.dart';
+import 'package:packinh/core/utils/enums.dart';
 import 'package:packinh/core/widgets/custom_app_bar_widget.dart';
 import 'package:packinh/core/widgets/custom_green_button_widget.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
@@ -26,7 +28,8 @@ class HostelDetailsScreen extends StatelessWidget {
         builder: (context, state) {
           HostelEntity? hostel;
           if (state is MyHostelsLoaded) {
-            hostel = state.hostels.firstWhere((h) => h.id == hostelId,
+            hostel = state.hostels.firstWhere(
+              (h) => h.id == hostelId,
               orElse: () => throw Exception('Hostel not found'),
             );
           } else if (state is MyHostelsLoading) {
@@ -69,11 +72,17 @@ class HostelDetailsScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              'Status: ${hostel.approved ? 'Approved' : 'Pending'}',
+                              'Status: ${hostel.status.value}',
                               style: TextStyle(
                                 fontSize: 16,
-                                color:
-                                    hostel.approved ? Colors.green : Colors.red,
+                                color: hostel.status == Status.approved
+                                    ? mainColor
+                                    : hostel.status == Status.blocked
+                                        ? Colors.grey
+                                        : hostel.status == Status.rejected
+                                    ? Colors.red
+                                    : Colors.orange
+                                ,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

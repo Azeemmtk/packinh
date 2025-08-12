@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:packinh/core/utils/enums.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/constants/colors.dart';
@@ -13,7 +14,7 @@ class CustomMyHostelCard extends StatelessWidget {
     required this.rent,
     required this.rating,
     required this.distance,
-    required this.approved,
+    required this.status,
   });
 
   final String imageUrl;
@@ -22,10 +23,33 @@ class CustomMyHostelCard extends StatelessWidget {
   final int rent;
   final double rating;
   final int distance;
-  final bool approved;
+  final Status status;
 
   @override
   Widget build(BuildContext context) {
+
+    Color badgeColor;
+    String badgeText;
+
+    switch (status) {
+      case Status.approved:
+        badgeColor = mainColor;
+        badgeText = 'Approved';
+        break;
+      case Status.pending:
+        badgeColor = Colors.orange;
+        badgeText = 'Pending';
+        break;
+      case Status.blocked:
+        badgeColor = Colors.grey;
+        badgeText = 'Blocked';
+        break;
+      case Status.rejected:
+        badgeColor = Colors.red;
+        badgeText = 'Rejected';
+        break;
+    }
+
     return Container(
       width: double.infinity,
       height: height * 0.323,
@@ -59,7 +83,6 @@ class CustomMyHostelCard extends StatelessWidget {
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) {
-                      // Image is loaded
                       return child;
                     }
                     // Show shimmer while loading
@@ -68,12 +91,12 @@ class CustomMyHostelCard extends StatelessWidget {
                         baseColor: secondaryColor,
                         direction: ShimmerDirection.ltr,
                         highlightColor: mainColor,
-                      child: Container(
-                        width: double.infinity,
-                        height: 170,
-                        color: Colors.white,
-                      ),
-                    );
+                        child: Container(
+                          width: double.infinity,
+                          height: 170,
+                          color: Colors.white,
+                        ),
+                      );
                   },
                   errorBuilder: (context, error, stackTrace) => Container(
                     height: 170,
@@ -89,11 +112,11 @@ class CustomMyHostelCard extends StatelessWidget {
                   padding:
                   const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: approved ? mainColor : Colors.red,
+                    color: badgeColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    approved ? 'Approved' : 'Pending',
+                    badgeText,
                     style: const TextStyle(color: Colors.white, fontSize: 12),
                   ),
                 ),

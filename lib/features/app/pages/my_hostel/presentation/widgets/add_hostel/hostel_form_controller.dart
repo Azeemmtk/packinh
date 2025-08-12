@@ -11,6 +11,7 @@ import 'package:uuid/uuid.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/dataSourse/cloudinary_data_source.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/provider/cubit/location/location_cubit.dart';
+import '../../../../../../../core/utils/enums.dart';
 import '../../provider/bloc/add_hostel/add_hostel_bloc.dart';
 import '../../provider/bloc/add_hostel/add_hostel_event.dart';
 
@@ -159,7 +160,7 @@ class HostelFormController {
           smallImageUrls: _smallImageUrls,
           smallImagePublicIds: _smallImagePublicIds,
           createdAt: DateTime.now(),
-          approved: false,
+          status: Status.pending,
         );
 
         context.read<AddHostelBloc>().add(SubmitHostelEvent(hostel));
@@ -229,7 +230,7 @@ class HostelFormController {
           smallImageUrls: _smallImageUrls,
           smallImagePublicIds: _smallImagePublicIds,
           createdAt: hostel.createdAt,
-          approved: hostel.approved,
+          status: hostel.status,
         );
 
         context.read<UpdateHostelBloc>().add(UpdateHostelSubmitEvent(updatedHostel));

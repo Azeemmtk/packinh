@@ -60,7 +60,7 @@ class MyHostelsScreen extends StatelessWidget {
                                 : 0,
                             rating: 5.0,
                             distance: 0,
-                            approved: hostel.approved,
+                            status: hostel.status,
                           ),
                         );
                       },

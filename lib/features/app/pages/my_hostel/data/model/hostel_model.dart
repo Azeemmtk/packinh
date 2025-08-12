@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:packinh/core/utils/enums.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
 
 class HostelModel {
@@ -18,7 +19,7 @@ class HostelModel {
   final List<String> smallImageUrls;
   final List<String> smallImagePublicIds;
   final DateTime createdAt;
-  final bool approved; // New field
+  final Status status;
 
   HostelModel({
     required this.id,
@@ -37,7 +38,7 @@ class HostelModel {
     required this.smallImageUrls,
     required this.smallImagePublicIds,
     required this.createdAt,
-    required this.approved, // New field
+    required this.status,
   });
 
   factory HostelModel.fromEntity(HostelEntity entity) {
@@ -58,7 +59,7 @@ class HostelModel {
       smallImageUrls: entity.smallImageUrls,
       smallImagePublicIds: entity.smallImagePublicIds,
       createdAt: entity.createdAt,
-      approved: entity.approved, // New field
+      status: entity.status,
     );
   }
 
@@ -80,7 +81,7 @@ class HostelModel {
       'smallImageUrls': smallImageUrls,
       'smallImagePublicIds': smallImagePublicIds,
       'createdAt': Timestamp.fromDate(createdAt),
-      'approved': approved, // New field
+      'status': status.value,
     };
   }
 
@@ -102,7 +103,7 @@ class HostelModel {
       smallImageUrls: smallImageUrls,
       smallImagePublicIds: smallImagePublicIds,
       createdAt: createdAt,
-      approved: approved, // New field
+      status: status,
     );
   }
 
@@ -124,7 +125,7 @@ class HostelModel {
       smallImageUrls: List<String>.from(json['smallImageUrls']),
       smallImagePublicIds: List<String>.from(json['smallImagePublicIds']),
       createdAt: (json['createdAt'] as Timestamp).toDate(),
-      approved: json['approved'] ?? false, // New field, default to false
+      status: StatusExtension.fromString(json['status'] ?? 'pending'),
     );
   }
 }
