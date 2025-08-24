@@ -23,9 +23,7 @@ class ReviewRoomSection extends StatelessWidget {
         const TitleTextWidget(title: 'Rooms'),
         height10,
         ...rooms.map((room) => AvailableRoomWidget(
-          type: room['type'],
-          count: room['count'],
-          rate: room['rate'],
+          room: room,
         )),
         height5,
         height20,

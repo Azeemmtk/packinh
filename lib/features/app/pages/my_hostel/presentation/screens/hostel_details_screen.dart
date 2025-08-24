@@ -17,7 +17,7 @@ import '../widgets/hostel_details/review_room_section.dart';
 import 'hostel_edit_screen.dart';
 
 class HostelDetailsScreen extends StatelessWidget {
-  final String hostelId; // Use hostel ID instead of full entity
+  final String hostelId;
 
   const HostelDetailsScreen({super.key, required this.hostelId});
 

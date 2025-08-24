@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/di/injection.dart';
-import 'package:packinh/core/services/current_user.dart';
 import 'package:packinh/core/services/geolocation_services.dart';
 import 'package:packinh/core/widgets/custom_app_bar_widget.dart';
 import 'package:packinh/core/widgets/custom_green_button_widget.dart';
@@ -14,7 +13,6 @@ import 'package:packinh/features/app/pages/my_hostel/presentation/widgets/add_ho
 import '../provider/bloc/add_hostel/add_hostel_bloc.dart';
 import '../provider/bloc/add_hostel/add_hostel_state.dart';
 import '../provider/bloc/my_hostel/my_hostel_bloc.dart';
-import '../provider/bloc/my_hostel/my_hostel_event.dart';
 
 class AddHostelScreen extends StatefulWidget {
   const AddHostelScreen({super.key});

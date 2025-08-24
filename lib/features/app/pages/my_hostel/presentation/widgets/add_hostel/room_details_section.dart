@@ -4,11 +4,17 @@ import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/widgets/custom_green_button_widget.dart';
 import 'package:packinh/core/widgets/custom_text_field_widget.dart';
+import 'package:packinh/features/app/pages/my_hostel/presentation/widgets/add_hostel/room_card_widget.dart';
 
 class RoomDetailsSection extends StatefulWidget {
   final List<Map<String, dynamic>> rooms;
   final String? roomsError;
-  final Function(String, int, double) onAddRoom;
+  final void Function({
+    required String type,
+    required int count,
+    required double rate,
+    String additionalFacility,
+  }) onAddRoom;
   final Function(Map<String, dynamic>) onRemoveRoom;
   final VoidCallback onErrorChanged;
 
@@ -28,17 +34,20 @@ class RoomDetailsSection extends StatefulWidget {
 class _RoomDetailsSectionState extends State<RoomDetailsSection> {
   final TextEditingController _countController = TextEditingController();
   final TextEditingController _rateController = TextEditingController();
+  final TextEditingController _additionalFacilityController =
+      TextEditingController();
   String? _selectedType;
   String? _typeError;
   String? _countError;
   String? _rateError;
 
-  final List<String> _roomTypes = ['Single', '2 Share', '3 Share', 'Shared', 'Dormitory'];
+  final List<String> _roomTypes = ['Single', 'Shared', 'Dormitory'];
 
   void _showAddRoomDialog() {
     _selectedType = null;
     _countController.clear();
     _rateController.clear();
+    _additionalFacilityController.clear();
     _typeError = null;
     _countError = null;
     _rateError = null;
@@ -59,14 +68,17 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
             DecoratedBox(
               decoration: BoxDecoration(
                 color: mainColor,
-                  borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: DropdownButton<String>(
                 dropdownColor: Colors.white,
                 value: _selectedType,
                 hint: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: const Text('Select room type',style: TextStyle(color: Colors.white),),
+                  child: const Text(
+                    'Select room type',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 isExpanded: true,
                 items: _roomTypes.map((String type) {
@@ -106,7 +118,7 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
               },
               onChanged: (_) => setState(() => _countError = null),
             ),
-            height10,
+            height5,
             CustomTextFieldWidget(
               hintText: '₹₹₹₹',
               fieldName: 'Room Rate',
@@ -124,34 +136,43 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
               },
               onChanged: (_) => setState(() => _rateError = null),
             ),
+            height10,
+            CustomTextFieldWidget(
+              hintText: 'eg: Ac, balcony',
+              fieldName: 'Additional Facilities',
+              controller: _additionalFacilityController,
+            ),
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
           CustomGreenButtonWidget(
             name: 'Add',
             onPressed: () {
               setState(() {
-                _typeError = _selectedType == null ? 'Room type is required' : null;
+                _typeError =
+                    _selectedType == null ? 'Room type is required' : null;
                 _countError = _countController.text.isEmpty
                     ? 'Room count is required'
                     : int.tryParse(_countController.text) == null
-                    ? 'Enter a valid number'
-                    : null;
+                        ? 'Enter a valid number'
+                        : null;
                 _rateError = _rateController.text.isEmpty
                     ? 'Room rate is required'
                     : double.tryParse(_rateController.text) == null
-                    ? 'Enter a valid number'
-                    : null;
+                        ? 'Enter a valid number'
+                        : null;
 
-                if (_typeError == null && _countError == null && _rateError == null) {
+                if (_typeError == null &&
+                    _countError == null &&
+                    _rateError == null) {
                   widget.onAddRoom(
-                    _selectedType!,
-                    int.parse(_countController.text),
-                    double.parse(_rateController.text),
+                    type: _selectedType!,
+                    count: int.parse(_countController.text),
+                    rate: double.parse(_rateController.text),
+                    additionalFacility:
+                        _additionalFacilityController.text.isEmpty
+                            ? "No additional facility"
+                            : _additionalFacilityController.text,
                   );
                   widget.onErrorChanged();
                   Navigator.pop(context);
@@ -186,29 +207,27 @@ class _RoomDetailsSectionState extends State<RoomDetailsSection> {
             widget.roomsError!,
             style: const TextStyle(color: Colors.red, fontSize: 12),
           ),
-        ...widget.rooms.map((room) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '${room['type']} (${room['count']})',
-                style: const TextStyle(fontSize: 17),
+        if (widget.rooms.isNotEmpty)
+          SizedBox(
+            height: height * 0.22,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: widget.rooms.map((room) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: RoomCardWidget(
+                      room: room,
+                      onRemove: () {
+                        widget.onRemoveRoom(room);
+                        widget.onErrorChanged();
+                      },
+                    ),
+                  );
+                }).toList(),
               ),
-              Text(
-                '₹${room['rate']}',
-                style: const TextStyle(fontSize: 17),
-              ),
-              IconButton(
-                icon: const Icon(FontAwesomeIcons.trash, size: 16, color: Colors.red),
-                onPressed: () {
-                  widget.onRemoveRoom(room);
-                  widget.onErrorChanged();
-                },
-              ),
-            ],
+            ),
           ),
-        )),
       ],
     );
   }

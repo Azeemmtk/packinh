@@ -54,7 +54,7 @@ class AuthBloc extends Bloc<dynamic, dynamic> {
     result.fold(
           (failure) => emit(EmailAuthError(message: failure.message)),
           (_) async {
-        CurrentUser().uId = null; // Clear CurrentUser on sign out
+        CurrentUser().uId = null;
         emit(const EmailAuthInitial());
         await localStorageService.clearUserId();
       },

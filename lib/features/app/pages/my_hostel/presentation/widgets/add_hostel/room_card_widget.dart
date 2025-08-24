@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:packinh/core/constants/colors.dart';
+
 import '../../../../../../../core/constants/const.dart';
 
-class AvailableRoomWidget extends StatelessWidget {
+class RoomCardWidget extends StatelessWidget {
   final Map<String, dynamic> room;
+  final VoidCallback onRemove;
 
-  const AvailableRoomWidget({
+  const RoomCardWidget({
     super.key,
     required this.room,
+    required this.onRemove,
   });
 
   @override
@@ -67,6 +71,21 @@ class AvailableRoomWidget extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.trash,
+                      size: 16,
+                      color: Colors.red.shade600,
+                    ),
+                    onPressed: onRemove,
+                    tooltip: 'Remove room',
                   ),
                 ),
               ],

@@ -63,14 +63,23 @@ class HostelFormController {
     _facilityError = _facilities.isEmpty ? 'At least one facility is required' : null;
   }
 
-  void addRoom(String type, int count, double rate) {
+  void addRoom({
+    required String type,
+    required int count,
+    required double rate,
+    String additionalFacility = "No additional facility",
+  }) {
     _rooms.add({
       'type': type,
       'count': count,
       'rate': rate,
+      'additionalFacility': additionalFacility.isEmpty
+          ? "No additional facility"
+          : additionalFacility,
     });
     _roomsError = null;
   }
+
 
   void removeRoom(Map<String, dynamic> room) {
     _rooms.remove(room);
