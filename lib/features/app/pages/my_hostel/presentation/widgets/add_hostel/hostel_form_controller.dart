@@ -63,6 +63,8 @@ class HostelFormController {
     _facilityError = _facilities.isEmpty ? 'At least one facility is required' : null;
   }
 
+  var uuid = Uuid();
+
   void addRoom({
     required String type,
     required int count,
@@ -70,6 +72,7 @@ class HostelFormController {
     String additionalFacility = "No additional facility",
   }) {
     _rooms.add({
+      'roomId': uuid.v4(),
       'type': type,
       'count': count,
       'rate': rate,

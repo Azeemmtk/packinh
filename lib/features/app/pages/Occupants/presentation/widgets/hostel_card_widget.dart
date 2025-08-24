@@ -52,13 +52,19 @@ class HostelCardWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    height10,
                     Text(
                       'Summit hostel',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
+                      ),
+                    ),
+                    Text(
+                      'Occupants: 5',
+                      style: const TextStyle(
+                        fontSize: 13,
                       ),
                     ),
                     width5,
