@@ -44,21 +44,21 @@ class OccupantDetailsAppbarWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Azeem ali',
+                        occupant.name,
                         style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                             color: headingTextColor),
                       ),
                       Text(
-                        '7994042391',
+                        occupant.phone,
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        '24',
+                        occupant.age.toString(),
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,

@@ -11,6 +11,7 @@ class OccupantEntity extends Equatable {
   final String userId;
   final String? hostelId;
   final String? roomId;
+  final String? roomType;
   final bool rentPaid;
 
   const OccupantEntity({
@@ -25,6 +26,7 @@ class OccupantEntity extends Equatable {
     this.hostelId,
     this.roomId,
     this.rentPaid= false,
+    this.roomType,
   });
 
   @override
@@ -39,7 +41,8 @@ class OccupantEntity extends Equatable {
     userId,
     hostelId,
     roomId,
-    rentPaid
+    rentPaid,
+    roomType
   ];
 }
 

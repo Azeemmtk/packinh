@@ -21,7 +21,7 @@ class HostelCardWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AllOccupantScreen(hostelId: hostel.id),
+            builder: (context) => AllOccupantScreen(hostelId: hostel.id, hostelName: hostel.name,),
           ),
         );
       },

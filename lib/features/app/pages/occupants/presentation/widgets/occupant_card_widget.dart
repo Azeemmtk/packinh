@@ -6,10 +6,14 @@ import 'package:packinh/features/app/pages/occupants/presentation/screens/occupa
 
 class OccupantCardWidget extends StatelessWidget {
   final OccupantEntity occupant;
+  final String hostelName;
+  final String roomType;
 
   const OccupantCardWidget({
     super.key,
     required this.occupant,
+    required this.hostelName,
+    required this.roomType,
   });
 
   @override
@@ -22,7 +26,11 @@ class OccupantCardWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => OccupantDetailsScreen(occupantId: occupant.id!),
+            builder: (context) => OccupantDetailsScreen(
+              occupantId: occupant.id!,
+              hostelName: hostelName,
+              roomType: roomType,
+            ),
           ),
         );
       },
@@ -49,7 +57,8 @@ class OccupantCardWidget extends StatelessWidget {
                   bottomLeft: Radius.circular(12),
                 ),
                 child: Image.network(
-                  occupant.idProofUrl ?? imagePlaceHolder, // Assume some image for occupant
+                  occupant.idProofUrl ??
+                      imagePlaceHolder, // Assume some image for occupant
                   width: width * 0.35,
                   height: height * 0.12,
                   fit: BoxFit.cover,

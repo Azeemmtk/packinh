@@ -8,10 +8,10 @@ import 'package:packinh/features/app/pages/occupants/presentation/widgets/occupa
 import '../provider/bloc/occupants_bloc/occupants_bloc.dart';
 
 class AllOccupantScreen extends StatelessWidget {
-  const AllOccupantScreen({super.key, required this.hostelId, this.hostelName});
+  const AllOccupantScreen({super.key, required this.hostelId,required this.hostelName});
 
   final String hostelId;
-  final String? hostelName; // Optional, if you want to pass name
+  final String hostelName;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class AllOccupantScreen extends StatelessWidget {
                     child: ListView.separated(
                       padding: EdgeInsets.zero,
                       itemBuilder: (context, index) {
-                        return OccupantCardWidget(occupant: occupants[index]);
+                        return OccupantCardWidget(occupant: occupants[index], hostelName: hostelName, roomType: occupants[index].roomType!,);
                       },
                       separatorBuilder: (context, index) => height20,
                       itemCount: occupants.length,
