@@ -6,7 +6,7 @@ import 'package:packinh/features/app/pages/my_hostel/presentation/screens/my_hos
 import 'package:packinh/features/app/pages/wallet/presentation/wallet_screen.dart';
 
 import '../../../../../core/services/current_user.dart';
-import '../../../pages/Occupants/presentation/screens/occupants_screen.dart';
+import '../../../pages/occupants/presentation/screens/occupants_screen.dart';
 import '../../../pages/account/presentation/screens/account_screen.dart';
 import '../../../pages/home/presentation/screen/home_screen.dart';
 import '../../../pages/my_hostel/presentation/provider/bloc/my_hostel/my_hostel_bloc.dart';

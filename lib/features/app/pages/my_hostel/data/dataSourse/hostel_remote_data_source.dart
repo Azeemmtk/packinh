@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
-import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
+import 'package:packinh/core/entity/hostel_entity.dart';
 import '../../../../../../core/error/exceptions.dart';
 import '../../../../../../core/error/failures.dart';
-import '../model/hostel_model.dart';
+import '../../../../../../core/model/hostel_model.dart';
 
 abstract class HostelRemoteDataSource {
   Future<Either<Failure, void>> addHostel(HostelEntity hostel);

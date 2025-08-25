@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:packinh/core/di/injection.dart';
 import 'package:packinh/core/services/current_user.dart';
 import 'package:packinh/core/utils/validators.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/provider/bloc/my_hostel/my_hostel_bloc.dart';
@@ -9,8 +8,9 @@ import 'package:packinh/features/app/pages/my_hostel/presentation/provider/bloc/
 import 'package:packinh/features/app/pages/my_hostel/presentation/provider/bloc/update_hostel/update_hostel_bloc.dart';
 import 'package:uuid/uuid.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/dataSourse/cloudinary_data_source.dart';
-import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
+import 'package:packinh/core/entity/hostel_entity.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/provider/cubit/location/location_cubit.dart';
+import '../../../../../../../core/di/injection.dart';
 import '../../../../../../../core/utils/enums.dart';
 import '../../provider/bloc/add_hostel/add_hostel_bloc.dart';
 import '../../provider/bloc/add_hostel/add_hostel_event.dart';
@@ -164,6 +164,7 @@ class HostelFormController {
           contactNumber: contactNumberController.text,
           description: descriptionController.text,
           facilities: _facilities,
+          occupantsId: [],
           rooms: _rooms,
           ownerId: CurrentUser().uId ?? '',
           ownerName: '',

@@ -1,4 +1,4 @@
-import '../../../../domain/entity/hostel_entity.dart';
+import '../../../../../../../../core/entity/hostel_entity.dart';
 
 abstract class MyHostelsState {}
 

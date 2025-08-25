@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../../../../core/constants/colors.dart';
 import '../../../../../../core/constants/const.dart';
+import '../../../../../../core/entity/occupant_entity.dart';
 
 class OccupantDetailsAppbarWidget extends StatelessWidget {
-  const OccupantDetailsAppbarWidget({super.key});
+  const OccupantDetailsAppbarWidget({super.key, required this.occupant});
+  final OccupantEntity occupant;
 
   @override
   Widget build(BuildContext context) {

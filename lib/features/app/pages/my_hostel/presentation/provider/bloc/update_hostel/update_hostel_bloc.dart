@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:packinh/core/error/failures.dart';
-import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
+import 'package:packinh/core/entity/hostel_entity.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/usecases/update_hostel.dart';
 
 part 'update_hostel_event.dart';

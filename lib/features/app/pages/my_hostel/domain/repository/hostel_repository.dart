@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
+import 'package:packinh/core/entity/hostel_entity.dart';
 import '../../../../../../core/error/failures.dart';
 
 abstract class HostelRepository {

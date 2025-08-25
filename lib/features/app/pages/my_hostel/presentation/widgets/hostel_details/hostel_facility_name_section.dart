@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/constants/const.dart';
-import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
+import 'package:packinh/core/entity/hostel_entity.dart';
 import 'package:shimmer/shimmer.dart';
 import 'facility_container.dart';
 

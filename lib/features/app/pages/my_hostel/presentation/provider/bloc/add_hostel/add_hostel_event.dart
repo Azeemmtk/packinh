@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
+import 'package:packinh/core/entity/hostel_entity.dart';
 
 abstract class AddHostelEvent extends Equatable {
   const AddHostelEvent();

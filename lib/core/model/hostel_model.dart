@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:packinh/core/utils/enums.dart';
-import 'package:packinh/features/app/pages/my_hostel/domain/entity/hostel_entity.dart';
+import 'package:packinh/core/entity/hostel_entity.dart';
 
 class HostelModel {
   final String id;
@@ -11,6 +11,7 @@ class HostelModel {
   final String contactNumber;
   final String description;
   final List<String> facilities;
+  final List<String>? occupantsId;
   final List<Map<String, dynamic>> rooms;
   final String ownerId;
   final String ownerName;
@@ -30,6 +31,7 @@ class HostelModel {
     required this.contactNumber,
     required this.description,
     required this.facilities,
+    this.occupantsId,
     required this.rooms,
     required this.ownerId,
     required this.ownerName,
@@ -51,6 +53,7 @@ class HostelModel {
       contactNumber: entity.contactNumber,
       description: entity.description,
       facilities: entity.facilities,
+      occupantsId: entity.occupantsId,
       rooms: entity.rooms,
       ownerId: entity.ownerId,
       ownerName: entity.ownerName,
@@ -73,6 +76,7 @@ class HostelModel {
       'contactNumber': contactNumber,
       'description': description,
       'facilities': facilities,
+      'occupantsId':occupantsId,
       'rooms': rooms,
       'ownerId': ownerId,
       'ownerName': ownerName,
@@ -95,6 +99,7 @@ class HostelModel {
       contactNumber: contactNumber,
       description: description,
       facilities: facilities,
+      occupantsId: occupantsId,
       rooms: rooms,
       ownerId: ownerId,
       ownerName: ownerName,
@@ -117,6 +122,7 @@ class HostelModel {
       contactNumber: json['contactNumber'],
       description: json['description'],
       facilities: List<String>.from(json['facilities']),
+      occupantsId: List<String>.from(json['occupantsId']),
       rooms: List<Map<String, dynamic>>.from(json['rooms']),
       ownerId: json['ownerId'],
       ownerName: json['ownerName'],

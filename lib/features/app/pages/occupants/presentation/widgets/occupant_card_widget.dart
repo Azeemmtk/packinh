@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:packinh/features/app/pages/Occupants/presentation/screens/occupant_details_screen.dart';
-import '../../../../../../core/constants/colors.dart';
-import '../../../../../../core/constants/const.dart';
+import 'package:packinh/core/constants/colors.dart';
+import 'package:packinh/core/constants/const.dart';
+import 'package:packinh/core/entity/occupant_entity.dart';
+import 'package:packinh/features/app/pages/occupants/presentation/screens/occupant_details_screen.dart';
 
 class OccupantCardWidget extends StatelessWidget {
+  final OccupantEntity occupant;
+
   const OccupantCardWidget({
     super.key,
+    required this.occupant,
   });
 
   @override
   Widget build(BuildContext context) {
+    final rentStatus = occupant.rentPaid ? 'Paid' : 'Due';
+    final rentColor = occupant.rentPaid ? mainColor : Colors.red;
+
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => OccupantDetailsScreen(),));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OccupantDetailsScreen(occupantId: occupant.id!),
+          ),
+        );
       },
       child: Padding(
-        padding: EdgeInsets.only(left: padding, right: padding,),
+        padding: EdgeInsets.only(left: padding, right: padding),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -36,8 +48,8 @@ class OccupantCardWidget extends StatelessWidget {
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
                 ),
-                child: Image.asset(
-                  'assets/images/occupant_image.png',
+                child: Image.network(
+                  occupant.idProofUrl ?? imagePlaceHolder, // Assume some image for occupant
                   width: width * 0.35,
                   height: height * 0.12,
                   fit: BoxFit.cover,
@@ -57,7 +69,7 @@ class OccupantCardWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Azeem Ali',
+                          occupant.name,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -69,7 +81,8 @@ class OccupantCardWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Vadakara, calicut, kerala',
+                      // Assume address or something, hardcoded for now or add field
+                      'Address: Unknown',
                       style: TextStyle(
                         color: Colors.grey[500],
                         fontSize: 14,
@@ -86,9 +99,9 @@ class OccupantCardWidget extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Due',
-                          style: const TextStyle(
-                            color: Colors.red,
+                          rentStatus,
+                          style: TextStyle(
+                            color: rentColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

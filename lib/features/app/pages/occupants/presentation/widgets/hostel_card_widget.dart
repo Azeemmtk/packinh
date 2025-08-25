@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:packinh/features/app/pages/Occupants/presentation/screens/all_occupant_screen.dart';
-import '../../../../../../core/constants/const.dart';
+import 'package:packinh/core/constants/const.dart';
+import 'package:packinh/core/entity/hostel_entity.dart';
+import 'package:packinh/features/app/pages/occupants/presentation/screens/all_occupant_screen.dart';
 
 class HostelCardWidget extends StatelessWidget {
+  final HostelEntity hostel;
+
   const HostelCardWidget({
     super.key,
+    required this.hostel,
   });
 
   @override
   Widget build(BuildContext context) {
+    final occupantCount = hostel.occupantsId?.length ?? 0;
+    final imageUrl = hostel.mainImageUrl ?? imagePlaceHolder;
+
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AllOccupantScreen(),));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AllOccupantScreen(hostelId: hostel.id),
+          ),
+        );
       },
       child: Padding(
-        padding: EdgeInsets.only(left: padding, right: padding,),
+        padding: EdgeInsets.only(left: padding, right: padding),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -35,8 +47,8 @@ class HostelCardWidget extends StatelessWidget {
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
                 ),
-                child: Image.asset(
-                  'assets/images/occupant_image.png',
+                child: Image.network(
+                  imageUrl,
                   width: width * 0.35,
                   height: height * 0.08,
                   fit: BoxFit.cover,
@@ -55,14 +67,14 @@ class HostelCardWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Summit hostel',
+                      hostel.name,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
                     ),
                     Text(
-                      'Occupants: 5',
+                      'Occupants: $occupantCount',
                       style: const TextStyle(
                         fontSize: 13,
                       ),
