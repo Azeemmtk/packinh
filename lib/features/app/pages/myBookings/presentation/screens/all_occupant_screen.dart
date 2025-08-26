@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:packinh/core/di/injection.dart';
 import 'package:packinh/core/widgets/custom_app_bar_widget.dart';
 import 'package:packinh/core/constants/const.dart';
-import 'package:packinh/features/app/pages/occupants/presentation/widgets/occupant_card_widget.dart';
 
 import '../provider/bloc/occupants_bloc/occupants_bloc.dart';
+import '../widgets/occupant_card_widget.dart';
 
 class AllOccupantScreen extends StatelessWidget {
-  const AllOccupantScreen({super.key, required this.hostelId,required this.hostelName});
+  const AllOccupantScreen(
+      {super.key, required this.hostelId, required this.hostelName});
 
   final String hostelId;
   final String hostelName;
@@ -34,7 +35,11 @@ class AllOccupantScreen extends StatelessWidget {
                     child: ListView.separated(
                       padding: EdgeInsets.zero,
                       itemBuilder: (context, index) {
-                        return OccupantCardWidget(occupant: occupants[index], hostelName: hostelName, roomType: occupants[index].roomType!,);
+                        return OccupantCardWidget(
+                          occupant: occupants[index],
+                          hostelName: hostelName,
+                          roomType: occupants[index].roomType!,
+                        );
                       },
                       separatorBuilder: (context, index) => height20,
                       itemCount: occupants.length,
@@ -47,8 +52,8 @@ class AllOccupantScreen extends StatelessWidget {
             return Center(child: Text(state.message));
           } else {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              BlocProvider.of<OccupantsBloc>(context).add(
-                  FetchOccupantsByHostelId(hostelId));
+              BlocProvider.of<OccupantsBloc>(context)
+                  .add(FetchOccupantsByHostelId(hostelId));
             });
             return const Center(child: CircularProgressIndicator());
           }

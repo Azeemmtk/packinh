@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart' as google_sign_in_package;
 import 'package:packinh/core/services/local_storage_service.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/usecases/delete_hostel.dart';
+import 'package:packinh/features/app/pages/wallet/presentation/provider/cubit/editpayment/edit_payment_cubit.dart';
 import 'package:packinh/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:packinh/features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:packinh/features/auth/data/repository/auth_repository_impl.dart';
@@ -14,8 +15,6 @@ import 'package:packinh/features/auth/domain/usecase/sign_in_with_email.dart';
 import 'package:packinh/features/auth/domain/usecase/sign_out.dart';
 import 'package:packinh/features/auth/domain/usecase/sign_up_with_email.dart';
 import 'package:packinh/features/auth/domain/usecase/verify_otp.dart';
-import 'package:packinh/features/auth/presentation/provider/cubit/sign_in_cubit.dart';
-import 'package:packinh/features/app/pages/occupants/domain/usecases/get_occupant_by_id.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/dataSourse/cloudinary_data_source.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/dataSourse/hostel_remote_data_source.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/repository/hostel_repository_impl.dart';
@@ -33,12 +32,13 @@ import 'package:packinh/features/auth/presentation/provider/bloc/google/google_a
 import 'package:packinh/features/auth/presentation/provider/bloc/otp/otp_auth_bloc.dart';
 import 'package:packinh/features/auth/presentation/provider/cubit/otp_cubit.dart';
 import 'package:packinh/features/auth/presentation/provider/cubit/sign_up_cubit.dart';
-import '../../features/app/pages/occupants/domain/usecases/get_occupant_by_hostel_id.dart';
-import '../../features/app/pages/occupants/presentation/provider/bloc/occupant_details_bloc/occupant_details_bloc.dart';
-import '../../features/app/pages/occupants/presentation/provider/bloc/occupants_bloc/occupants_bloc.dart';
-import '../../features/app/pages/occupants/domain/repository/occupant_repository.dart';
-import '../../features/app/pages/occupants/data/datasourse/occupants_remote_data_source.dart';
-import '../../features/app/pages/occupants/data/repository/occupant_repository_impl.dart';
+import '../../features/app/pages/myBookings/data/datasourse/occupants_remote_data_source.dart';
+import '../../features/app/pages/myBookings/data/repository/occupant_repository_impl.dart';
+import '../../features/app/pages/myBookings/domain/repository/occupant_repository.dart';
+import '../../features/app/pages/myBookings/domain/usecases/get_occupant_by_hostel_id.dart';
+import '../../features/app/pages/myBookings/domain/usecases/get_occupant_by_id.dart';
+import '../../features/app/pages/myBookings/presentation/provider/bloc/occupant_details_bloc/occupant_details_bloc.dart';
+import '../../features/app/pages/myBookings/presentation/provider/bloc/occupants_bloc/occupants_bloc.dart';
 import '../../features/auth/domain/usecase/send-otp.dart';
 import '../services/cloudinary_services.dart';
 
@@ -157,7 +157,5 @@ Future<void> initializeDependencies() async {
   // Cubits
   getIt.registerFactory(() => OtpCubit());
   getIt.registerFactory(() => SignUpCubit());
-  getIt.registerFactory(
-        () => SignInCubit(),
-  );
+  getIt.registerFactory(() => EditPaymentCubit(),);
 }

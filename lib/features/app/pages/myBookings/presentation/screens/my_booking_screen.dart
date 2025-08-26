@@ -1,17 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:packinh/features/app/pages/occupants/presentation/widgets/hostel_card_widget.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/widgets/custom_app_bar_widget.dart';
 import 'package:packinh/core/widgets/title_text_widget.dart';
-
 import '../../../my_hostel/presentation/provider/bloc/my_hostel/my_hostel_bloc.dart';
 import '../../../my_hostel/presentation/provider/bloc/my_hostel/my_hostel_event.dart';
 import '../../../my_hostel/presentation/provider/bloc/my_hostel/my_hostel_state.dart';
+import '../widgets/hostel_card_widget.dart';
 
-class OccupantsScreen extends StatelessWidget {
-  const OccupantsScreen({super.key});
+class MyBookingScreen extends StatelessWidget {
+  const MyBookingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class OccupantsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomAppBarWidget(
-                title: 'Occupants',
+                title: 'My bookings',
                 enableChat: true,
               ),
               height10,

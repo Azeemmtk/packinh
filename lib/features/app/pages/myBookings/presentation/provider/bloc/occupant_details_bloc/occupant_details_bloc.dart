@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:packinh/core/entity/occupant_entity.dart';
-import 'package:packinh/features/app/pages/occupants/domain/usecases/get_occupant_by_id.dart';
+import '../../../../domain/usecases/get_occupant_by_id.dart';
 
 part 'occupant_details_event.dart';
 part 'occupant_details_state.dart';

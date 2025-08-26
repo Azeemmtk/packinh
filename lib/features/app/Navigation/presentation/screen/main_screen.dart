@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/features/app/Navigation/cubit/bottom_nav_cubit.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/screens/my_hostels_screen.dart';
-import 'package:packinh/features/app/pages/wallet/presentation/wallet_screen.dart';
-
+import 'package:packinh/features/app/pages/wallet/presentation/screens/wallet_screen.dart';
 import '../../../../../core/services/current_user.dart';
-import '../../../pages/occupants/presentation/screens/occupants_screen.dart';
+import '../../../pages/myBookings/presentation/screens/my_booking_screen.dart';
 import '../../../pages/account/presentation/screens/account_screen.dart';
 import '../../../pages/home/presentation/screen/home_screen.dart';
 import '../../../pages/my_hostel/presentation/provider/bloc/my_hostel/my_hostel_bloc.dart';
@@ -22,7 +21,7 @@ class MainScreen extends StatelessWidget {
       case BottomNavItem.home:
         return HomeScreen();
       case BottomNavItem.occupants:
-        return OccupantsScreen();
+        return MyBookingScreen();
       case BottomNavItem.myHostel:
         return MyHostelsScreen();
       case BottomNavItem.wallet:

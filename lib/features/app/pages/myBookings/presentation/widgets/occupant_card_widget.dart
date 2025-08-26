@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/entity/occupant_entity.dart';
-import 'package:packinh/features/app/pages/occupants/presentation/screens/occupant_details_screen.dart';
+
+import '../screens/occupant_details_screen.dart';
 
 class OccupantCardWidget extends StatelessWidget {
   final OccupantEntity occupant;
@@ -56,16 +57,16 @@ class OccupantCardWidget extends StatelessWidget {
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
                 ),
-                child: Image.network(
-                  occupant.idProofUrl ??
-                      imagePlaceHolder, // Assume some image for occupant
+                child: Image.asset(
+                      'assets/images/occupant_image.png',
                   width: width * 0.35,
                   height: height * 0.12,
                   fit: BoxFit.cover,
+
                   errorBuilder: (context, error, stackTrace) => Image.network(
                     imagePlaceHolder,
                     width: width * 0.35,
-                    height: height * 0.14,
+                    height: height * 0.12,
                     fit: BoxFit.cover,
                   ),
                 ),
