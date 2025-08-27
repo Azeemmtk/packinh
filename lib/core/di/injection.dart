@@ -32,13 +32,13 @@ import 'package:packinh/features/auth/presentation/provider/bloc/google/google_a
 import 'package:packinh/features/auth/presentation/provider/bloc/otp/otp_auth_bloc.dart';
 import 'package:packinh/features/auth/presentation/provider/cubit/otp_cubit.dart';
 import 'package:packinh/features/auth/presentation/provider/cubit/sign_up_cubit.dart';
-import '../../features/app/pages/myBookings/data/datasourse/occupants_remote_data_source.dart';
-import '../../features/app/pages/myBookings/data/repository/occupant_repository_impl.dart';
-import '../../features/app/pages/myBookings/domain/repository/occupant_repository.dart';
-import '../../features/app/pages/myBookings/domain/usecases/get_occupant_by_hostel_id.dart';
-import '../../features/app/pages/myBookings/domain/usecases/get_occupant_by_id.dart';
-import '../../features/app/pages/myBookings/presentation/provider/bloc/occupant_details_bloc/occupant_details_bloc.dart';
-import '../../features/app/pages/myBookings/presentation/provider/bloc/occupants_bloc/occupants_bloc.dart';
+import '../../features/app/pages/bookings/data/datasourse/occupants_remote_data_source.dart';
+import '../../features/app/pages/bookings/data/repository/occupant_repository_impl.dart';
+import '../../features/app/pages/bookings/domain/repository/occupant_repository.dart';
+import '../../features/app/pages/bookings/domain/usecases/get_occupant_by_hostel_id.dart';
+import '../../features/app/pages/bookings/domain/usecases/get_occupant_by_id.dart';
+import '../../features/app/pages/bookings/presentation/provider/bloc/occupant_details_bloc/occupant_details_bloc.dart';
+import '../../features/app/pages/bookings/presentation/provider/bloc/occupants_bloc/occupants_bloc.dart';
 import '../../features/auth/domain/usecase/send-otp.dart';
 import '../services/cloudinary_services.dart';
 

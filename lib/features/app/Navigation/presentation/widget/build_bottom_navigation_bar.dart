@@ -30,7 +30,7 @@ class BuildBottomNavigationBar extends StatelessWidget {
           ),
           _buildBottomNavItem(
             icon: Icons.search,
-            label: 'My bookings',
+            label: 'Bookings',
             isActive: currentItem == BottomNavItem.occupants,
             onTap: () => cubit.selectItem(BottomNavItem.occupants),
           ),

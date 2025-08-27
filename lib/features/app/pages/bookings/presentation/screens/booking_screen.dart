@@ -9,8 +9,8 @@ import '../../../my_hostel/presentation/provider/bloc/my_hostel/my_hostel_event.
 import '../../../my_hostel/presentation/provider/bloc/my_hostel/my_hostel_state.dart';
 import '../widgets/hostel_card_widget.dart';
 
-class MyBookingScreen extends StatelessWidget {
-  const MyBookingScreen({super.key});
+class BookingScreen extends StatelessWidget {
+  const BookingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class MyBookingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomAppBarWidget(
-                title: 'My bookings',
+                title: 'Bookings',
                 enableChat: true,
               ),
               height10,
