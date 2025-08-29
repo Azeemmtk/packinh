@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:packinh/core/constants/colors.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primarySwatch: Colors.cyan,
     scaffoldBackgroundColor: Colors.white,
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: mainColor,
+    ),
     textTheme: GoogleFonts.robotoTextTheme(
       ThemeData.light().textTheme,
     ).apply(
@@ -17,6 +21,9 @@ class AppTheme {
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: const Color(0xFF121212),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: mainColor,
+    ),
     textTheme: GoogleFonts.robotoTextTheme(
       ThemeData.dark().textTheme,
     ).apply(

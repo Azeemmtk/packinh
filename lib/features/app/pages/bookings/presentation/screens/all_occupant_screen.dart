@@ -16,48 +16,49 @@ class AllOccupantScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<OccupantsBloc>(),
-      child: BlocBuilder<OccupantsBloc, OccupantsState>(
-        builder: (context, state) {
-          if (state is OccupantsLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is OccupantsLoaded) {
-            final occupants = state.occupants;
-            return Scaffold(
-              body: Column(
-                children: [
-                  CustomAppBarWidget(
-                    title: hostelName ?? 'Hostel Occupants',
-                  ),
-                  height10,
-                  Expanded(
-                    child: ListView.separated(
-                      padding: EdgeInsets.zero,
-                      itemBuilder: (context, index) {
-                        return OccupantCardWidget(
-                          occupant: occupants[index],
-                          hostelName: hostelName,
-                          roomType: occupants[index].roomType!,
-                        );
-                      },
-                      separatorBuilder: (context, index) => height20,
-                      itemCount: occupants.length,
+    return Scaffold(
+      body: Column(
+        children: [
+          CustomAppBarWidget(title: hostelName),
+          BlocProvider(
+            create: (context) => getIt<OccupantsBloc>()..add(FetchOccupantsByHostelId(hostelId)),
+            child: BlocBuilder<OccupantsBloc, OccupantsState>(
+              builder: (context, state) {
+                if (state is OccupantsLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is OccupantsLoaded) {
+                  final occupants = state.occupants;
+                  return Expanded(
+                    child: Column(
+                      children: [
+                        height10,
+                        Expanded(
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              return OccupantCardWidget(
+                                occupant: occupants[index],
+                                hostelName: hostelName,
+                                roomType: occupants[index].roomType!,
+                              );
+                            },
+                            separatorBuilder: (context, index) => height20,
+                            itemCount: occupants.length,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            );
-          } else if (state is OccupantsError) {
-            return Center(child: Text(state.message));
-          } else {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              BlocProvider.of<OccupantsBloc>(context)
-                  .add(FetchOccupantsByHostelId(hostelId));
-            });
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+                  );
+                } else if (state is OccupantsError) {
+                  return Center(child: Text(state.message));
+                }
+                else {
+                    return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          )
+        ],
       ),
     );
   }

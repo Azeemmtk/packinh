@@ -8,6 +8,7 @@ class OccupantEntity extends Equatable {
   final GuardianEntity? guardian;
   final String? idProofUrl;
   final String? addressProofUrl;
+  final String? profileImageUrl;
   final String userId;
   final String? hostelId;
   final String? roomId;
@@ -22,6 +23,7 @@ class OccupantEntity extends Equatable {
     this.guardian,
     this.idProofUrl,
     this.addressProofUrl,
+    this.profileImageUrl,
     required this.userId,
     this.hostelId,
     this.roomId,
@@ -42,7 +44,8 @@ class OccupantEntity extends Equatable {
     hostelId,
     roomId,
     rentPaid,
-    roomType
+    roomType,
+    profileImageUrl,
   ];
 }
 

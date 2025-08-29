@@ -35,7 +35,7 @@ class OccupantDetailsAppbarWidget extends StatelessWidget {
                       child: CircleAvatar(
                         radius: 65,
                         backgroundImage:
-                            AssetImage('assets/images/occupant_image.png'),
+                            NetworkImage(occupant.profileImageUrl!),
                       ),
                     ),
                   ),

@@ -14,49 +14,57 @@ class BookingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MyHostelsBloc, MyHostelsState>(
-      builder: (context, state) {
-        if (state is MyHostelsLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is MyHostelsLoaded) {
-          final hostels = state.hostels; // List<HostelModel>
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomAppBarWidget(
-                title: 'Bookings',
-                enableChat: true,
-              ),
-              height10,
-              TitleTextWidget(title: '  Your Hostels'),
-              height10,
-              Expanded(
-                child: ListView.separated(
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) {
-                    return HostelCardWidget(hostel: hostels[index]);
-                  },
-                  separatorBuilder: (context, index) => height20,
-                  itemCount: hostels.length,
+    return Column(
+      children: [
+        CustomAppBarWidget(
+          title: 'Bookings',
+          enableChat: true,
+        ),
+        height10,
+        BlocBuilder<MyHostelsBloc, MyHostelsState>(
+          builder: (context, state) {
+            if (state is MyHostelsLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is MyHostelsLoaded) {
+              final hostels = state.hostels;
+              return Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TitleTextWidget(title: '  Your Hostels'),
+                    height10,
+                    Expanded(
+                      child: ListView.separated(
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, index) {
+                          return HostelCardWidget(hostel: hostels[index]);
+                        },
+                        separatorBuilder: (context, index) => height20,
+                        itemCount: hostels.length,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          );
-        } else if (state is MyHostelsError) {
-          return Center(child: Text(state.message));
-        } else {
-          // Fetch the current user's ID
-          final userId = FirebaseAuth.instance.currentUser?.uid;
-          if (userId != null) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              BlocProvider.of<MyHostelsBloc>(context).add(FetchMyHostels(userId));
-            });
-          } else {
-            return const Center(child: Text('Please log in to view hostels'));
-          }
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
+              );
+            } else if (state is MyHostelsError) {
+              return Center(child: Text(state.message));
+            } else {
+              // Fetch the current user's ID
+              final userId = FirebaseAuth.instance.currentUser?.uid;
+              if (userId != null) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  BlocProvider.of<MyHostelsBloc>(context)
+                      .add(FetchMyHostels(userId));
+                });
+              } else {
+                return const Center(
+                    child: Text('Please log in to view hostels'));
+              }
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+      ],
     );
   }
 }

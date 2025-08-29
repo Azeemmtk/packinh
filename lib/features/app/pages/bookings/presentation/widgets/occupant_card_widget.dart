@@ -57,8 +57,8 @@ class OccupantCardWidget extends StatelessWidget {
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
                 ),
-                child: Image.asset(
-                      'assets/images/occupant_image.png',
+                child: Image.network(
+                      occupant.profileImageUrl!,
                   width: width * 0.35,
                   height: height * 0.12,
                   fit: BoxFit.cover,
@@ -91,8 +91,8 @@ class OccupantCardWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      // Assume address or something, hardcoded for now or add field
-                      'Address: Unknown',
+
+                      'Phone: ${occupant.phone}',
                       style: TextStyle(
                         color: Colors.grey[500],
                         fontSize: 14,

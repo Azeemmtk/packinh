@@ -8,6 +8,7 @@ class OccupantModel {
   final Map<String, dynamic>? guardian;
   final String? idProofUrl;
   final String? addressProofUrl;
+  final String? profileImageUrl;
   final String userId;
   final String? hostelId;
   final String? roomId;
@@ -22,11 +23,12 @@ class OccupantModel {
     this.guardian,
     this.idProofUrl,
     this.addressProofUrl,
+    this.profileImageUrl,
     required this.userId,
     this.hostelId,
     this.roomId,
     this.roomType,
-    this.rentPaid= false,
+    this.rentPaid = false,
   });
 
   Map<String, dynamic> toJson() {
@@ -38,10 +40,11 @@ class OccupantModel {
       'guardian': guardian,
       'idProofUrl': idProofUrl,
       'addressProofUrl': addressProofUrl,
+      'profileImageUrl': profileImageUrl,
       'userId': userId,
       'hostelId': hostelId,
       'roomId': roomId,
-      'roomType':roomType,
+      'roomType': roomType,
       'rentPaid': rentPaid,
     };
   }
@@ -54,13 +57,14 @@ class OccupantModel {
       age: age,
       guardian: guardian != null
           ? GuardianEntity(
-        name: guardian!['name'],
-        phone: guardian!['phone'],
-        relation: guardian!['relation'],
-      )
+              name: guardian!['name'],
+              phone: guardian!['phone'],
+              relation: guardian!['relation'],
+            )
           : null,
       idProofUrl: idProofUrl,
       addressProofUrl: addressProofUrl,
+      profileImageUrl: profileImageUrl,
       userId: userId,
       hostelId: hostelId,
       roomId: roomId,
@@ -71,41 +75,41 @@ class OccupantModel {
 
   factory OccupantModel.fromEntity(OccupantEntity occupant) {
     return OccupantModel(
-      id: occupant.id,
-      name: occupant.name,
-      phone: occupant.phone,
-      age: occupant.age,
-      guardian: occupant.guardian != null
-          ? {
-        'name': occupant.guardian!.name,
-        'phone': occupant.guardian!.phone,
-        'relation': occupant.guardian!.relation,
-      }
-          : null,
-      idProofUrl: occupant.idProofUrl,
-      addressProofUrl: occupant.addressProofUrl,
-      userId: occupant.userId,
-      hostelId: occupant.hostelId,
-      roomId: occupant.roomId,
+        id: occupant.id,
+        name: occupant.name,
+        phone: occupant.phone,
+        age: occupant.age,
+        guardian: occupant.guardian != null
+            ? {
+                'name': occupant.guardian!.name,
+                'phone': occupant.guardian!.phone,
+                'relation': occupant.guardian!.relation,
+              }
+            : null,
+        idProofUrl: occupant.idProofUrl,
+        addressProofUrl: occupant.addressProofUrl,
+        profileImageUrl: occupant.profileImageUrl,
+        userId: occupant.userId,
+        hostelId: occupant.hostelId,
+        roomId: occupant.roomId,
         roomType: occupant.roomType,
-      rentPaid: occupant.rentPaid
-    );
+        rentPaid: occupant.rentPaid);
   }
 
   factory OccupantModel.fromJson(Map<String, dynamic> json) {
     return OccupantModel(
-      id: json['id'],
-      name: json['name'],
-      phone: json['phone'],
-      age: json['age'],
-      guardian: json['guardian'],
-      idProofUrl: json['idProofUrl'],
-      addressProofUrl: json['addressProofUrl'],
-      userId: json['userId'],
-      hostelId: json['hostelId'],
-      roomId: json['roomId'],
-      roomType: json['roomType'],
-      rentPaid: json['rentPaid']
-    );
+        id: json['id'],
+        name: json['name'],
+        phone: json['phone'],
+        age: json['age'],
+        guardian: json['guardian'],
+        idProofUrl: json['idProofUrl'],
+        addressProofUrl: json['addressProofUrl'],
+        profileImageUrl: json['profileImageUrl'],
+        userId: json['userId'],
+        hostelId: json['hostelId'],
+        roomId: json['roomId'],
+        roomType: json['roomType'],
+        rentPaid: json['rentPaid']);
   }
 }
