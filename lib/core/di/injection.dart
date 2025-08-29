@@ -4,13 +4,20 @@ import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart' as google_sign_in_package;
 import 'package:packinh/core/services/local_storage_service.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/usecases/delete_hostel.dart';
+import 'package:packinh/features/app/pages/wallet/data/datasources/rent_paid_remote_data_source.dart';
+import 'package:packinh/features/app/pages/wallet/data/respository/payment_repository_impl.dart';
+import 'package:packinh/features/app/pages/wallet/domain/respository/payment_repository.dart';
+import 'package:packinh/features/app/pages/wallet/domain/usecases/get_rent_use_case.dart';
+import 'package:packinh/features/app/pages/wallet/domain/usecases/rent_paid_use_case.dart';
+import 'package:packinh/features/app/pages/wallet/presentation/provider/bloc/rent_bloc.dart';
 import 'package:packinh/features/app/pages/wallet/presentation/provider/cubit/editpayment/edit_payment_cubit.dart';
 import 'package:packinh/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:packinh/features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:packinh/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:packinh/features/auth/domain/repository/auth_repository.dart';
 import 'package:packinh/features/auth/domain/usecase/check_auth_status.dart';
-import 'package:packinh/features/auth/domain/usecase/google_sign_in.dart' as google_sign_in_usecase;
+import 'package:packinh/features/auth/domain/usecase/google_sign_in.dart'
+    as google_sign_in_usecase;
 import 'package:packinh/features/auth/domain/usecase/sign_in_with_email.dart';
 import 'package:packinh/features/auth/domain/usecase/sign_out.dart';
 import 'package:packinh/features/auth/domain/usecase/sign_up_with_email.dart';
@@ -48,9 +55,9 @@ Future<void> initializeDependencies() async {
   // External Dependencies
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   getIt.registerLazySingleton<FirebaseFirestore>(
-          () => FirebaseFirestore.instance);
+      () => FirebaseFirestore.instance);
   getIt.registerLazySingleton<google_sign_in_package.GoogleSignIn>(
-        () => google_sign_in_package.GoogleSignIn(scopes: ['email', 'profile']),
+    () => google_sign_in_package.GoogleSignIn(scopes: ['email', 'profile']),
   );
 
   // Services
@@ -59,37 +66,44 @@ Future<void> initializeDependencies() async {
 
   // Data Sources
   getIt.registerLazySingleton<AuthRemoteDataSource>(
-        () => AuthRemoteDataSourceImpl(
+    () => AuthRemoteDataSourceImpl(
       firebaseAuth: getIt<FirebaseAuth>(),
       googleSignIn: getIt<google_sign_in_package.GoogleSignIn>(),
       firestore: getIt<FirebaseFirestore>(),
     ),
   );
   getIt.registerLazySingleton<CloudinaryDataSource>(
-        () => CloudinaryDataSourceImpl(getIt<CloudinaryService>()),
+    () => CloudinaryDataSourceImpl(getIt<CloudinaryService>()),
   );
   getIt.registerLazySingleton<HostelRemoteDataSource>(
-        () => HostelRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
+    () => HostelRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
   );
   getIt.registerLazySingleton<OccupantsRemoteDataSource>(
-        () => OccupantsRemoteDataSource(getIt<FirebaseFirestore>()),
+    () => OccupantsRemoteDataSource(getIt<FirebaseFirestore>()),
+  );
+  getIt.registerLazySingleton<RentPaidRemoteDataSource>(
+    () => RentPaidRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
   );
 
   // Repositories
   getIt.registerLazySingleton<AuthRepository>(
-        () => AuthRepositoryImpl(remoteDataSource: getIt<AuthRemoteDataSource>()),
+    () => AuthRepositoryImpl(remoteDataSource: getIt<AuthRemoteDataSource>()),
   );
   getIt.registerLazySingleton<HostelRepository>(
-        () => HostelRepositoryImpl(getIt<HostelRemoteDataSource>()),
+    () => HostelRepositoryImpl(getIt<HostelRemoteDataSource>()),
   );
   getIt.registerLazySingleton<OccupantsRepository>(
-        () => OccupantsRepositoryImpl(getIt<OccupantsRemoteDataSource>()),
+    () => OccupantsRepositoryImpl(getIt<OccupantsRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<PaymentRepository>(
+    () => PaymentRepositoryImpl(getIt<RentPaidRemoteDataSource>()),
   );
 
   // Use Cases
   getIt.registerLazySingleton(() => CheckAuthStatus(getIt<AuthRepository>()));
   getIt.registerLazySingleton(
-          () => google_sign_in_usecase.GoogleSignIn(getIt<AuthRepository>()));
+      () => google_sign_in_usecase.GoogleSignIn(getIt<AuthRepository>()));
   getIt.registerLazySingleton(() => SignInWithEmail(getIt<AuthRepository>()));
   getIt.registerLazySingleton(() => SignUpWithEmail(getIt<AuthRepository>()));
   getIt.registerLazySingleton(() => SignOut(getIt<AuthRepository>()));
@@ -97,37 +111,45 @@ Future<void> initializeDependencies() async {
   getIt.registerLazySingleton(() => SendOtp(getIt<AuthRepository>()));
   getIt.registerLazySingleton(() => AddHostel(getIt<HostelRepository>()));
   getIt.registerLazySingleton(
-          () => GetHostelsByOwner(getIt<HostelRepository>()));
+      () => GetHostelsByOwner(getIt<HostelRepository>()));
   getIt.registerLazySingleton(() => DeleteHostel(getIt<HostelRepository>()));
   getIt.registerLazySingleton(() => ResetPassword(getIt<AuthRepository>()));
   getIt.registerLazySingleton(() => UpdateHostel(getIt<HostelRepository>()));
-  getIt.registerLazySingleton(() => GetOccupantsByHostelId(getIt<OccupantsRepository>()));
-  getIt.registerLazySingleton(() => GetOccupantById(getIt<OccupantsRepository>()),);
-  // getIt.registerLazySingleton(() => GetOccupantById(getIt<OccupantsRepository>()));
+  getIt.registerLazySingleton(
+      () => GetOccupantsByHostelId(getIt<OccupantsRepository>()));
+  getIt.registerLazySingleton(
+    () => GetOccupantById(getIt<OccupantsRepository>()),
+  );
+  getIt.registerLazySingleton(
+    () => RentPaidUseCase(getIt<PaymentRepository>()),
+  );
+  getIt.registerLazySingleton(
+    () => GetRentUseCase(getIt<PaymentRepository>()),
+  );
 
   // BLoCs
   getIt.registerFactory(
-        () => EmailAuthBloc(
+    () => EmailAuthBloc(
       signInWithEmail: getIt<SignInWithEmail>(),
       signUpWithEmail: getIt<SignUpWithEmail>(),
       resetPassword: getIt<ResetPassword>(),
     ),
   );
   getIt.registerFactory(
-        () => GoogleAuthBloc(
+    () => GoogleAuthBloc(
       googleSignIn: getIt<google_sign_in_usecase.GoogleSignIn>(),
       localStorageService: getIt<LocalStorageService>(),
     ),
   );
   getIt.registerFactory(
-        () => OtpAuthBloc(
+    () => OtpAuthBloc(
       sendOtp: getIt<SendOtp>(),
       verifyOtp: getIt<VerifyOtp>(),
       firestore: getIt<FirebaseFirestore>(),
     ),
   );
   getIt.registerFactory(
-        () => AuthBloc(
+    () => AuthBloc(
       checkAuthStatus: getIt<CheckAuthStatus>(),
       signOut: getIt<SignOut>(),
       emailAuthBloc: getIt<EmailAuthBloc>(),
@@ -137,25 +159,33 @@ Future<void> initializeDependencies() async {
     ),
   );
   getIt.registerFactory(
-        () => AddHostelBloc(addHostel: getIt<AddHostel>()),
+    () => AddHostelBloc(addHostel: getIt<AddHostel>()),
   );
   getIt.registerFactory(
-        () => MyHostelsBloc(
+    () => MyHostelsBloc(
         deleteHostel: getIt<DeleteHostel>(),
         getHostelsByOwner: getIt<GetHostelsByOwner>()),
   );
   getIt.registerFactory(
-        () => UpdateHostelBloc(updateHostel: getIt<UpdateHostel>()),
+    () => UpdateHostelBloc(updateHostel: getIt<UpdateHostel>()),
   );
   getIt.registerFactory(
-        () => OccupantsBloc(getOccupantsByHostelId: getIt<GetOccupantsByHostelId>()),
+    () =>
+        OccupantsBloc(getOccupantsByHostelId: getIt<GetOccupantsByHostelId>()),
   );
   getIt.registerFactory(
-        () => OccupantDetailsBloc(getOccupantById: getIt<GetOccupantById>()),
+    () => OccupantDetailsBloc(getOccupantById: getIt<GetOccupantById>()),
+  );
+  getIt.registerFactory(
+    () => RentBloc(
+        getRentUseCase: getIt<GetRentUseCase>(),
+        rentPaidUseCase: getIt<RentPaidUseCase>()),
   );
 
   // Cubits
   getIt.registerFactory(() => OtpCubit());
   getIt.registerFactory(() => SignUpCubit());
-  getIt.registerFactory(() => EditPaymentCubit(),);
+  getIt.registerFactory(
+    () => EditPaymentCubit(),
+  );
 }
