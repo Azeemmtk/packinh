@@ -122,27 +122,43 @@ class PaymentModel {
       registrationDate: entity.registrationDate,
     );
   }
-}
 
-extension PaymentCopyWith on PaymentModel {
-  PaymentModel copyWith({bool? paymentStatus}) {
+  PaymentModel copyWith({
+    String? id,
+    String? userId,
+    String? occupantId,
+    String? hostelId,
+    double? amount,
+    double? rent,
+    String? extraMessage,
+    double? extraAmount,
+    double? discount,
+    String? occupantName,
+    String? occupantImage,
+    String? hostelName,
+    bool? paymentStatus,
+    bool? isBooking,
+    DateTime? dueDate,
+    DateTime? registrationDate,
+  }) {
     return PaymentModel(
-      id: id,
-      userId: userId,
-      occupantId: occupantId,
-      hostelId: hostelId,
-      amount: amount,
-      rent: rent,
-      extraMessage: extraMessage,
-      extraAmount: extraAmount,
-      discount: discount,
-      occupantName: occupantName,
-      occupantImage: occupantImage,
-      hostelName: hostelName,
-      isBooking: isBooking,
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      occupantId: occupantId ?? this.occupantId,
+      hostelId: hostelId ?? this.hostelId,
+      amount: amount ?? this.amount,
+      rent: rent ?? this.rent,
+      extraMessage: extraMessage ?? this.extraMessage,
+      extraAmount: extraAmount ?? this.extraAmount,
+      discount: discount ?? this.discount,
+      occupantName: occupantName ?? this.occupantName,
+      occupantImage: occupantImage ?? this.occupantImage,
+      hostelName: hostelName ?? this.hostelName,
       paymentStatus: paymentStatus ?? this.paymentStatus,
-      dueDate: dueDate,
-      registrationDate: registrationDate,
+      isBooking: isBooking ?? this.isBooking,
+      dueDate: dueDate ?? this.dueDate,
+      registrationDate: registrationDate ?? this.registrationDate,
     );
   }
+
 }

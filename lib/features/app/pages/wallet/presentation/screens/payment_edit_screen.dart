@@ -1,15 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:packinh/core/constants/const.dart';
+import 'package:packinh/core/services/date_picker.dart';
 import 'package:packinh/core/widgets/custom_app_bar_widget.dart';
-import 'package:packinh/core/widgets/custom_green_button_widget.dart'; // Add this import for Save button
+import 'package:packinh/core/widgets/custom_green_button_widget.dart';
 import 'package:packinh/core/widgets/custom_text_field_widget.dart';
-import 'package:packinh/core/widgets/title_text_widget.dart';
-import 'package:packinh/features/app/pages/wallet/presentation/provider/cubit/editpayment/edit_payment_cubit.dart';
+import 'package:packinh/features/app/pages/wallet/data/model/payment_model.dart';
+import 'package:packinh/features/app/pages/wallet/presentation/provider/bloc/rent_bloc.dart';
 
 class PaymentEditScreen extends StatefulWidget {
-  const PaymentEditScreen({super.key});
+  PaymentEditScreen({super.key, required this.payments});
+
+  final PaymentModel payments;
 
   @override
   State<PaymentEditScreen> createState() => _PaymentEditScreenState();
@@ -18,133 +21,152 @@ class PaymentEditScreen extends StatefulWidget {
 class _PaymentEditScreenState extends State<PaymentEditScreen> {
   late TextEditingController dueDateController;
   late TextEditingController rentController;
-  late TextEditingController extraMessageController;
-  late TextEditingController extraAmountController;
+  late TextEditingController additionalMessageController;
+  late TextEditingController additionalAmountController;
   late TextEditingController discountAmountController;
 
   @override
   void initState() {
     super.initState();
-    final state = context.read<EditPaymentCubit>().state;
-    dueDateController = TextEditingController(text: state.formattedDueDate);
-    rentController = TextEditingController(text: state.rent.toStringAsFixed(2));
-    extraMessageController = TextEditingController(text: state.extraMessage);
-    extraAmountController = TextEditingController(text: state.extraAmount.toStringAsFixed(2));
-    discountAmountController = TextEditingController(text: state.discount.toStringAsFixed(2));
+
+    dueDateController = TextEditingController(text: widget.payments.dueDate.toString().substring(0, 10));
+    rentController = TextEditingController(text: widget.payments.rent.toString());
+    additionalMessageController = TextEditingController(text: widget.payments.extraMessage ?? '');
+    additionalAmountController = TextEditingController(text: widget.payments.extraAmount?.toString() ?? '');
+    discountAmountController = TextEditingController(text: widget.payments.discount?.toString() ?? '');
   }
 
   @override
   void dispose() {
     dueDateController.dispose();
     rentController.dispose();
-    extraMessageController.dispose();
-    extraAmountController.dispose();
+    additionalAmountController.dispose();
+    additionalMessageController.dispose();
     discountAmountController.dispose();
     super.dispose();
   }
 
-  Future<void> _pickDueDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: context.read<EditPaymentCubit>().state.dueDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null) {
-      dueDateController.text = DateFormat('E, d MMM').format(picked);
-      context.read<EditPaymentCubit>().updateDueDate(picked);
+  void _savePayment() {
+    final Map<String, dynamic> updatedData = {};
+
+    // Compare and add only changed fields
+    final newDueDate = DateTime.tryParse(dueDateController.text);
+    if (newDueDate != null && newDueDate != widget.payments.dueDate) {
+      updatedData['dueDate'] = Timestamp.fromDate(newDueDate);
     }
+
+    final newRent = double.tryParse(rentController.text);
+    if (newRent != null && newRent != widget.payments.rent) {
+      updatedData['rent'] = newRent;
+    }
+
+    final newExtraMessage = additionalMessageController.text.isNotEmpty ? additionalMessageController.text : null;
+    if (newExtraMessage != widget.payments.extraMessage) {
+      updatedData['extraMessage'] = newExtraMessage;
+    }
+
+    final newExtraAmount = double.tryParse(additionalAmountController.text);
+    if (newExtraAmount != widget.payments.extraAmount) {
+      updatedData['extraAmount'] = newExtraAmount;
+    }
+
+    final newDiscount = double.tryParse(discountAmountController.text);
+    if (newDiscount != widget.payments.discount) {
+      updatedData['discount'] = newDiscount;
+    }
+
+    // Only dispatch the event if there are changes
+    if (updatedData.isNotEmpty) {
+      context.read<RentBloc>().add(UpdatePaymentEvent(
+        id: widget.payments.id!,
+        data: updatedData,
+      ));
+    }
+
+    // Navigate back after saving
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          CustomAppBarWidget(title: 'Edit payment'),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    TitleTextWidget(title: 'Due date'),
-                    GestureDetector(
-                      onTap: () => _pickDueDate(context),
-                      child: AbsorbPointer(
-                        child: CustomTextFieldWidget(
-                          hintText: 'Due date',
-                          fieldName: 'Due date',
-                          controller: dueDateController,
+    return BlocListener<RentBloc, RentState>(
+      listener: (context, state) {
+        if (state is RentError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            CustomAppBarWidget(title: 'Edit payment'),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(padding),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      height50,
+                      GestureDetector(
+                        onTap: () async {
+                          final date = await datePicker(context);
+                          if (date != null) {
+                            dueDateController.text = date.toString().substring(0, 10);
+                          }
+                        },
+                        child: AbsorbPointer(
+                          child: CustomTextFieldWidget(
+                            hintText: 'Due date',
+                            fieldName: 'Due date',
+                            controller: dueDateController,
+                          ),
                         ),
                       ),
-                    ),
-                    height10,
-                    TitleTextWidget(title: 'Rent'),
-                    CustomTextFieldWidget(
-                      hintText: 'Rent',
-                      fieldName: 'Rent',
-                      controller: rentController,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        final double? parsed = double.tryParse(value);
-                        if (parsed != null) {
-                          context.read<EditPaymentCubit>().updateRent(parsed);
-                        }
-                      },
-                    ),
-                    height10,
-                    TitleTextWidget(title: 'Extra message'),
-                    CustomTextFieldWidget(
-                      hintText: 'Enter message',
-                      fieldName: 'Extra message',
-                      controller: extraMessageController,
-                      onChanged: (value) {
-                        context.read<EditPaymentCubit>().updateExtraMessage(value);
-                      },
-                    ),
-                    height10,
-                    TitleTextWidget(title: 'Extra amount'),
-                    CustomTextFieldWidget(
-                      hintText: 'Extra amount',
-                      fieldName: 'Extra amount',
-                      controller: extraAmountController,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        final double? parsed = double.tryParse(value);
-                        if (parsed != null) {
-                          context.read<EditPaymentCubit>().updateExtraAmount(parsed);
-                        }
-                      },
-                    ),
-                    height10,
-                    TitleTextWidget(title: 'Discount amount'),
-                    CustomTextFieldWidget(
-                      hintText: 'Discount amount',
-                      fieldName: 'Discount amount',
-                      controller: discountAmountController,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        final double? parsed = double.tryParse(value);
-                        if (parsed != null) {
-                          context.read<EditPaymentCubit>().updateDiscountAmount(parsed);
-                        }
-                      },
-                    ),
-                    SizedBox(height: height * 0.15),
-                    CustomGreenButtonWidget(
-                      name: 'Save',
-                      onPressed: () {
-                        // Updates are already emitted on change; just pop back
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
+                      height10,
+                      CustomTextFieldWidget(
+                        hintText: 'Rent',
+                        fieldName: 'Rent',
+                        controller: rentController,
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {},
+                      ),
+                      height10,
+                      CustomTextFieldWidget(
+                        hintText: 'Add additional message',
+                        fieldName: 'Additional message',
+                        controller: additionalMessageController,
+                        onChanged: (value) {},
+                      ),
+                      height10,
+                      CustomTextFieldWidget(
+                        hintText: 'Add additional amount',
+                        fieldName: 'Additional amount',
+                        controller: additionalAmountController,
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {},
+                      ),
+                      height10,
+                      CustomTextFieldWidget(
+                        hintText: 'Discount amount',
+                        fieldName: 'Discount amount',
+                        controller: discountAmountController,
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {},
+                      ),
+                      height50,
+                      CustomGreenButtonWidget(
+                        name: 'Save',
+                        onPressed: _savePayment,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

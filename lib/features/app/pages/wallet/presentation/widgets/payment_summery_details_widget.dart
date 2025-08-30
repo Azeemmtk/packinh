@@ -1,7 +1,6 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:packinh/features/app/pages/wallet/data/model/payment_model.dart';
-import 'package:packinh/features/app/pages/wallet/presentation/provider/cubit/editpayment/edit_payment_state.dart';
 import '../../../../../../core/constants/const.dart';
 import '../../../../../../core/widgets/details_row_widget.dart';
 import '../../../../../../core/widgets/title_text_widget.dart';
@@ -23,11 +22,11 @@ class PaymentSummeryDetailsWidget extends StatelessWidget {
         height10,
         DetailsRowWidget(
           title: 'Room rent',
-          value: '₹${payment.rent}',
+          value: '₹${payment.amount + (payment.extraAmount ?? 0) - (payment.discount ?? 0)}',
         ),
         height10,
         DetailsRowWidget(
-          title: payment.extraMessage ??' Extra payment',
+          title: payment.extraMessage ??' additional payment',
           value: '₹${payment.extraAmount ?? '0.0'}',
         ),
         height10,
@@ -40,7 +39,7 @@ class PaymentSummeryDetailsWidget extends StatelessWidget {
         height20,
         DetailsRowWidget(
           title: 'Total price',
-          value: '₹${payment.amount}',
+          value: '₹${payment.amount + (payment.extraAmount ?? 0) - (payment.discount ?? 0)}',
           isBold: true,
         ),
       ],

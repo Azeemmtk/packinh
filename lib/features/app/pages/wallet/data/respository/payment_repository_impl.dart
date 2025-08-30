@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dartz/dartz.dart';
 import 'package:packinh/core/error/exceptions.dart';
 import 'package:packinh/core/error/failures.dart';
@@ -25,6 +27,16 @@ class PaymentRepositoryImpl extends PaymentRepository {
       final payments = await remoteDataSource.getRent();
       return Right(payments);
     } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updatePayment(String id, Map<String, dynamic> updatedPayments) async{
+    try{
+      await remoteDataSource.updatePayment(id, updatedPayments);
+      return Right(null);
+    } on ServerException catch (e){
       return Left(ServerFailure(e.message));
     }
   }

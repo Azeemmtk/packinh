@@ -9,8 +9,8 @@ import 'package:packinh/features/app/pages/wallet/data/respository/payment_repos
 import 'package:packinh/features/app/pages/wallet/domain/respository/payment_repository.dart';
 import 'package:packinh/features/app/pages/wallet/domain/usecases/get_rent_use_case.dart';
 import 'package:packinh/features/app/pages/wallet/domain/usecases/rent_paid_use_case.dart';
+import 'package:packinh/features/app/pages/wallet/domain/usecases/update_payment_use_case.dart';
 import 'package:packinh/features/app/pages/wallet/presentation/provider/bloc/rent_bloc.dart';
-import 'package:packinh/features/app/pages/wallet/presentation/provider/cubit/editpayment/edit_payment_cubit.dart';
 import 'package:packinh/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:packinh/features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:packinh/features/auth/data/repository/auth_repository_impl.dart';
@@ -127,6 +127,12 @@ Future<void> initializeDependencies() async {
     () => GetRentUseCase(getIt<PaymentRepository>()),
   );
 
+  getIt.registerLazySingleton(
+        () => UpdatePaymentUseCase(getIt<PaymentRepository>()),
+  );
+
+
+
   // BLoCs
   getIt.registerFactory(
     () => EmailAuthBloc(
@@ -179,13 +185,12 @@ Future<void> initializeDependencies() async {
   getIt.registerFactory(
     () => RentBloc(
         getRentUseCase: getIt<GetRentUseCase>(),
-        rentPaidUseCase: getIt<RentPaidUseCase>()),
+        rentPaidUseCase: getIt<RentPaidUseCase>(),
+      updatePaymentUseCase: getIt<UpdatePaymentUseCase>(),
+    ),
   );
 
   // Cubits
   getIt.registerFactory(() => OtpCubit());
   getIt.registerFactory(() => SignUpCubit());
-  getIt.registerFactory(
-    () => EditPaymentCubit(),
-  );
 }

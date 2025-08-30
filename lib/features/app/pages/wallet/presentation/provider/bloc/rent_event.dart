@@ -20,3 +20,13 @@ class RentPaidEvent extends RentEvent{
   List<Object?> get props => [paymentId];
 
 }
+
+class UpdatePaymentEvent extends RentEvent{
+  final String id;
+  final Map<String ,dynamic> data;
+
+  const UpdatePaymentEvent({required this.id, required this.data});
+
+  @override
+  List<Object?> get props => [id, data];
+}

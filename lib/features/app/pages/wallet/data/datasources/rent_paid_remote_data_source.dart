@@ -6,6 +6,7 @@ import 'package:packinh/features/app/pages/wallet/data/model/payment_model.dart'
 abstract class RentPaidRemoteDataSource {
   Future<List<PaymentModel>> getRent();
   Future<void> rentPaid(String paymentId);
+  Future<void> updatePayment(String id, Map<String, dynamic> updatedPayment);
 }
 
 class RentPaidRemoteDataSourceImpl extends RentPaidRemoteDataSource {
@@ -50,6 +51,15 @@ class RentPaidRemoteDataSourceImpl extends RentPaidRemoteDataSource {
       return payments;
     } catch (e) {
       throw ServerException('Failed to get payments: $e');
+    }
+  }
+
+  @override
+  Future<void> updatePayment(String id, Map<String, dynamic> updatedPayment) async{
+    try{
+      await firestore.collection('payments').doc(id).update(updatedPayment);
+    } catch (e){
+      throw ServerException('failed to update payment $e');
     }
   }
 }

@@ -25,8 +25,11 @@ class WalletCardWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PaymentDetailsScreen(
-              payment: payment,
+            builder: (ctx) => BlocProvider.value(
+              value: context.read<RentBloc>(),
+              child: PaymentDetailsScreen(
+                payment: payment,
+              ),
             ),
           ),
         );
@@ -92,14 +95,14 @@ class WalletCardWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'RENT - ',
+                          'Amount - ',
                           style: const TextStyle(
                             color: mainColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
-                          payment.amount.toString(),
+                          (payment.amount + (payment.extraAmount ?? 0) - (payment.discount ?? 0)).toString(),
                           style: TextStyle(
                             color: rentColor,
                             fontWeight: FontWeight.w600,
@@ -122,8 +125,9 @@ class WalletCardWidget extends StatelessWidget {
               child: Center(
                 child: IconButton(
                   onPressed: () async {
-                    print('paid------------');
-                    context.read<RentBloc>().add(RentPaidEvent(payment.id!));
+                    if(!payment.paymentStatus ){
+                      context.read<RentBloc>().add(RentPaidEvent(payment.id!));
+                    }
                   },
                   icon: Icon(
                     FontAwesomeIcons.check,
