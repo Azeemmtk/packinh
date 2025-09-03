@@ -38,27 +38,29 @@ class PaymentDetailsScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (ctx) => BlocProvider.value(
-                              value: context.read<RentBloc>(),
-                              child: PaymentEditScreen(payments: payment),
+                    if(payment.paymentStatus == false)
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => BlocProvider.value(
+                                value: context.read<RentBloc>(),
+                                child: PaymentEditScreen(payments: payment),
+                              ),
                             ),
+                          );
+                        },
+                        child: Text(
+                          'Edit 📝',
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: mainColor,
+                            fontWeight: FontWeight.bold,
                           ),
-                        );
-                      },
-                      child: Text(
-                        'Edit 📝',
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: mainColor,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
+
                   ],
                 ),
                 SizedBox(height: height * 0.07),

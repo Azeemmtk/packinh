@@ -3,6 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart' as google_sign_in_package;
 import 'package:packinh/core/services/local_storage_service.dart';
+import 'package:packinh/features/app/pages/chat/data/datasource/chat_remote_data_source.dart';
+import 'package:packinh/features/app/pages/chat/data/datasource/owner_remote_data_source.dart';
+import 'package:packinh/features/app/pages/chat/data/repository/chat_repository_impl.dart';
+import 'package:packinh/features/app/pages/chat/data/repository/owner_repository_impl.dart';
+import 'package:packinh/features/app/pages/chat/domain/repository/chat_repository.dart';
+import 'package:packinh/features/app/pages/chat/domain/repository/owner_repository.dart';
+import 'package:packinh/features/app/pages/chat/domain/usecases/create_chat_use_case.dart';
+import 'package:packinh/features/app/pages/chat/domain/usecases/get_chats_use_case.dart';
+import 'package:packinh/features/app/pages/chat/domain/usecases/get_messages_use_case.dart';
+import 'package:packinh/features/app/pages/chat/domain/usecases/get_owner_details_use_case.dart';
+import 'package:packinh/features/app/pages/chat/domain/usecases/send_message_use_case.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/usecases/delete_hostel.dart';
 import 'package:packinh/features/app/pages/wallet/data/datasources/rent_paid_remote_data_source.dart';
 import 'package:packinh/features/app/pages/wallet/data/respository/payment_repository_impl.dart';
@@ -46,6 +57,8 @@ import '../../features/app/pages/bookings/domain/usecases/get_occupant_by_hostel
 import '../../features/app/pages/bookings/domain/usecases/get_occupant_by_id.dart';
 import '../../features/app/pages/bookings/presentation/provider/bloc/occupant_details_bloc/occupant_details_bloc.dart';
 import '../../features/app/pages/bookings/presentation/provider/bloc/occupants_bloc/occupants_bloc.dart';
+import '../../features/app/pages/chat/presentation/providers/bloc/allchats/all_chat_bloc.dart';
+import '../../features/app/pages/chat/presentation/providers/bloc/chat/chat_bloc.dart';
 import '../../features/auth/domain/usecase/send-otp.dart';
 import '../services/cloudinary_services.dart';
 
@@ -85,6 +98,14 @@ Future<void> initializeDependencies() async {
     () => RentPaidRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
   );
 
+  getIt.registerLazySingleton<ChatRemoteDataSource>(
+        () => ChatRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
+  );
+
+  getIt.registerLazySingleton<OwnerRemoteDataSource>(
+        () => OwnerRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
+  );
+
   // Repositories
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(remoteDataSource: getIt<AuthRemoteDataSource>()),
@@ -98,6 +119,14 @@ Future<void> initializeDependencies() async {
 
   getIt.registerLazySingleton<PaymentRepository>(
     () => PaymentRepositoryImpl(getIt<RentPaidRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<ChatRepository>(
+        () => ChatRepositoryImpl(getIt<ChatRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<OwnerRepository>(
+        () => OwnerRepositoryImpl(getIt<OwnerRemoteDataSource>()),
   );
 
   // Use Cases
@@ -130,6 +159,14 @@ Future<void> initializeDependencies() async {
   getIt.registerLazySingleton(
         () => UpdatePaymentUseCase(getIt<PaymentRepository>()),
   );
+
+  getIt.registerLazySingleton(() => CreateChatUseCase(getIt<ChatRepository>()),);
+  getIt.registerLazySingleton(() => GetChatsUseCase(getIt<ChatRepository>()),);
+  getIt.registerLazySingleton(() => GetMessagesUseCase(getIt<ChatRepository>()),);
+  getIt.registerLazySingleton(() => SendMessageUseCase(getIt<ChatRepository>()),);
+  getIt.registerLazySingleton(() => GetOwnerDetailsUseCase(getIt<OwnerRepository>()),);
+
+
 
 
 
@@ -189,6 +226,17 @@ Future<void> initializeDependencies() async {
       updatePaymentUseCase: getIt<UpdatePaymentUseCase>(),
     ),
   );
+  getIt.registerFactory(() => AllChatBloc(getIt<GetChatsUseCase>()));
+  getIt.registerFactoryParam<ChatBloc, String, void>(
+        (chatId, _) => ChatBloc(
+      getMessagesUseCase: getIt<GetMessagesUseCase>(),
+      sendMessageUseCase: getIt<SendMessageUseCase>(),
+      chatId: chatId,
+    ),
+  );
+
+
+
 
   // Cubits
   getIt.registerFactory(() => OtpCubit());

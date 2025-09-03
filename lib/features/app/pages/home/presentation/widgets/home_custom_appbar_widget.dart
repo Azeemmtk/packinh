@@ -7,6 +7,7 @@ import '../../../../../../core/constants/const.dart';
 import '../../../../../auth/presentation/provider/bloc/auth_bloc.dart';
 import '../../../../../auth/presentation/provider/bloc/email/email_auth_state.dart';
 import '../../../../../auth/presentation/screens/sign_in_screen.dart';
+import '../../../chat/presentation/screens/all_chat_screen.dart';
 
 class HomeCustomAppbarWidget extends StatelessWidget {
   const HomeCustomAppbarWidget({super.key});
@@ -96,9 +97,19 @@ class HomeCustomAppbarWidget extends StatelessWidget {
                     );
                   },
                 ),
-                SvgPicture.asset(
-                  'assets/images/chat_icon.svg',
-                  height: 45,
+                InkWell(
+                  onTap: (){
+                    print(CurrentUser().uId);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllChatScreen(),
+                        ));
+                  },
+                  child: SvgPicture.asset(
+                    'assets/images/chat_icon.svg',
+                    height: 45,
+                  ),
                 ),
               ],
             ),
