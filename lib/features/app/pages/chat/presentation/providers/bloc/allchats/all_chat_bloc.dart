@@ -30,6 +30,7 @@ class AllChatBloc extends Bloc<AllChatsEvent, AllChatsState> {
     emit(AllChatsLoaded(event.chats));
   }
 
+  
   Future<void> _onErrorChats(ErrorChatsEvent event, Emitter<AllChatsState> emit) async {
     emit(AllChatsError(event.message));
   }

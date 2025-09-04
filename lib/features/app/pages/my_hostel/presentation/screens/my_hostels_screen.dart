@@ -58,7 +58,7 @@ class MyHostelsScreen extends StatelessWidget {
                             rent: hostel.rooms.isNotEmpty
                                 ? (hostel.rooms[0]['rate'] as double).toInt()
                                 : 0,
-                            rating: 5.0,
+                            rating: hostel.rating!,
                             distance: 0,
                             status: hostel.status,
                           ),

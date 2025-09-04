@@ -23,7 +23,7 @@ class HostelDetailsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const TitleTextWidget(title: 'Hostel Details'),
-         SizedBox(height: padding),
+        SizedBox(height: padding),
         CustomTextFieldWidget(
           hintText: 'Name',
           fieldName: 'Name',
@@ -35,7 +35,7 @@ class HostelDetailsSection extends StatelessWidget {
             onErrorChanged();
           },
         ),
-         SizedBox(height: padding),
+        SizedBox(height: padding),
         CustomTextFieldWidget(
           hintText: 'Contact Number',
           fieldName: 'Contact Number',
@@ -43,12 +43,18 @@ class HostelDetailsSection extends StatelessWidget {
           errorText: formController.contactError,
           validator: Validation.validatePhone,
           keyboardType: TextInputType.phone,
+          initialCountryCode: formController.countryCode ?? '+91',
+          onCountryCodeChanged: (fullNumber) {
+            formController.setCountryCode(fullNumber.substring(0, fullNumber.length - formController.contactNumberController.text.length));
+            formController.clearContactError();
+            onErrorChanged();
+          },
           onChanged: (_) {
             formController.clearContactError();
             onErrorChanged();
           },
         ),
-         SizedBox(height: padding),
+        SizedBox(height: padding),
         CustomTextFieldWidget(
           hintText: 'Description',
           fieldName: 'Description',
@@ -61,11 +67,14 @@ class HostelDetailsSection extends StatelessWidget {
             onErrorChanged();
           },
         ),
-         SizedBox(height: padding),
-        Text('Add facilities', style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),),
+        SizedBox(height: padding),
+        Text(
+          'Add facilities',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         FacilitySection(
           facilityController: formController.facilityController,
           facilityError: formController.facilityError,
@@ -74,7 +83,7 @@ class HostelDetailsSection extends StatelessWidget {
           onRemoveFacility: formController.removeFacility,
           onFacilityAdded: onErrorChanged,
         ),
-         SizedBox(height: padding),
+        SizedBox(height: padding),
         LocationSection(locationError: formController.locationError),
       ],
     );

@@ -48,6 +48,10 @@ class CustomMyHostelCard extends StatelessWidget {
         badgeColor = Colors.red;
         badgeText = 'Rejected';
         break;
+      case Status.active:
+        badgeColor = mainColor;
+        badgeText = 'active';
+        break;
     }
 
     return Container(

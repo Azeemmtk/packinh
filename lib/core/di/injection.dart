@@ -14,7 +14,12 @@ import 'package:packinh/features/app/pages/chat/domain/usecases/get_chats_use_ca
 import 'package:packinh/features/app/pages/chat/domain/usecases/get_messages_use_case.dart';
 import 'package:packinh/features/app/pages/chat/domain/usecases/get_owner_details_use_case.dart';
 import 'package:packinh/features/app/pages/chat/domain/usecases/send_message_use_case.dart';
+import 'package:packinh/features/app/pages/my_hostel/data/dataSourse/review_remote_data_source.dart';
+import 'package:packinh/features/app/pages/my_hostel/data/repository/review_repository_impl.dart';
+import 'package:packinh/features/app/pages/my_hostel/domain/repository/review_repository.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/usecases/delete_hostel.dart';
+import 'package:packinh/features/app/pages/my_hostel/domain/usecases/get_review_use_case.dart';
+import 'package:packinh/features/app/pages/my_hostel/presentation/provider/bloc/review/review_bloc.dart';
 import 'package:packinh/features/app/pages/wallet/data/datasources/rent_paid_remote_data_source.dart';
 import 'package:packinh/features/app/pages/wallet/data/respository/payment_repository_impl.dart';
 import 'package:packinh/features/app/pages/wallet/domain/respository/payment_repository.dart';
@@ -105,6 +110,9 @@ Future<void> initializeDependencies() async {
   getIt.registerLazySingleton<OwnerRemoteDataSource>(
         () => OwnerRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
   );
+  getIt.registerLazySingleton<ReviewRemoteDataSource>(
+        () => ReviewRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
+  );
 
   // Repositories
   getIt.registerLazySingleton<AuthRepository>(
@@ -128,6 +136,13 @@ Future<void> initializeDependencies() async {
   getIt.registerLazySingleton<OwnerRepository>(
         () => OwnerRepositoryImpl(getIt<OwnerRemoteDataSource>()),
   );
+
+  getIt.registerLazySingleton<ReviewRepository>(
+        () => ReviewRepositoryImpl(getIt<ReviewRemoteDataSource>()),
+  );
+
+
+
 
   // Use Cases
   getIt.registerLazySingleton(() => CheckAuthStatus(getIt<AuthRepository>()));
@@ -165,6 +180,9 @@ Future<void> initializeDependencies() async {
   getIt.registerLazySingleton(() => GetMessagesUseCase(getIt<ChatRepository>()),);
   getIt.registerLazySingleton(() => SendMessageUseCase(getIt<ChatRepository>()),);
   getIt.registerLazySingleton(() => GetOwnerDetailsUseCase(getIt<OwnerRepository>()),);
+
+
+  getIt.registerLazySingleton(() => GetReviewsUseCase(getIt<ReviewRepository>()),);
 
 
 
@@ -234,6 +252,8 @@ Future<void> initializeDependencies() async {
       chatId: chatId,
     ),
   );
+
+  getIt.registerFactory(() => ReviewBloc(getReviewsUseCase: getIt<GetReviewsUseCase>()));
 
 
 
