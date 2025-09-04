@@ -137,6 +137,7 @@ class HostelModel {
       smallImagePublicIds: List<String>.from(json['smallImagePublicIds']),
       createdAt: (json['createdAt'] as Timestamp).toDate(),
       status: StatusExtension.fromString(json['status'] ?? 'pending'),
+      rating: json['rating'] != null ? (json['rating'] as num).toDouble() : null,
     );
   }
 }
