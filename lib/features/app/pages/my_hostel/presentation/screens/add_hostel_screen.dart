@@ -47,7 +47,6 @@ class _AddHostelScreenState extends State<AddHostelScreen> {
             );
           } else if (state is AddHostelSuccess) {
             Navigator.pop(context,true);
-            // context.read<MyHostelsBloc>().add(FetchMyHostels(CurrentUser().uId ?? ''));
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Hostel added successfully!')),
             );

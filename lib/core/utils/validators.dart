@@ -21,10 +21,12 @@ class Validation {
 
   static String? validatePhone(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Phone number is required';
+      return 'Please enter a phone number';
     }
-    if (!RegExp(r'^\d{10}$').hasMatch(value)) {
-      return 'Phone number must be 10 digits';
+
+    final RegExp phoneRegex = RegExp(r'^\d{7,15}$');
+    if (!phoneRegex.hasMatch(value)) {
+      return 'Please enter a valid phone number';
     }
     return null;
   }

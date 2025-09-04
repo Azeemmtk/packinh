@@ -21,6 +21,7 @@ class HostelModel {
   final List<String> smallImagePublicIds;
   final DateTime createdAt;
   final Status status;
+  final double? rating;
 
   HostelModel({
     required this.id,
@@ -41,6 +42,7 @@ class HostelModel {
     required this.smallImagePublicIds,
     required this.createdAt,
     required this.status,
+    this.rating,
   });
 
   factory HostelModel.fromEntity(HostelEntity entity) {
@@ -63,6 +65,7 @@ class HostelModel {
       smallImagePublicIds: entity.smallImagePublicIds,
       createdAt: entity.createdAt,
       status: entity.status,
+      rating: entity.rating,
     );
   }
 
@@ -76,7 +79,7 @@ class HostelModel {
       'contactNumber': contactNumber,
       'description': description,
       'facilities': facilities,
-      'occupantsId':occupantsId,
+      'occupantsId': occupantsId,
       'rooms': rooms,
       'ownerId': ownerId,
       'ownerName': ownerName,
@@ -86,6 +89,7 @@ class HostelModel {
       'smallImagePublicIds': smallImagePublicIds,
       'createdAt': Timestamp.fromDate(createdAt),
       'status': status.value,
+      'rating': rating,
     };
   }
 
@@ -109,6 +113,7 @@ class HostelModel {
       smallImagePublicIds: smallImagePublicIds,
       createdAt: createdAt,
       status: status,
+      rating: rating,
     );
   }
 

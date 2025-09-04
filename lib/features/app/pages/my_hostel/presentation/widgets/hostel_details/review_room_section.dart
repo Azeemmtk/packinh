@@ -14,12 +14,7 @@ class ReviewRoomSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const TitleTextWidget(title: 'Review and rating'),
-        height10,
-        const ReviewContainer(),
-        height10,
-        const ReviewContainer(),
-        height20,
+
         const TitleTextWidget(title: 'Rooms'),
         height10,
         ...rooms.map((room) => AvailableRoomWidget(

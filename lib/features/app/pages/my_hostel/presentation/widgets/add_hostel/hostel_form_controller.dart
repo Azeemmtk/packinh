@@ -21,6 +21,9 @@ class HostelFormController {
   final TextEditingController contactNumberController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
+  String? _countryCode = '+91';
+  String? get countryCode => _countryCode;
+
   final List<String> _facilities = [];
   List<String> get facilities => _facilities;
 
@@ -48,6 +51,14 @@ class HostelFormController {
   String? _mainImagePublicId;
   List<String> _smallImageUrls = ['', '', ''];
   List<String> _smallImagePublicIds = ['', '', ''];
+
+  void setCountryCode(String code) {
+    _countryCode = code;
+  }
+
+  String getFullPhoneNumber() {
+    return '$_countryCode${contactNumberController.text}';
+  }
 
   void addFacility() {
     final facility = facilityController.text.trim();
@@ -82,7 +93,6 @@ class HostelFormController {
     });
     _roomsError = null;
   }
-
 
   void removeRoom(Map<String, dynamic> room) {
     _rooms.remove(room);
@@ -159,9 +169,9 @@ class HostelFormController {
           id: const Uuid().v4(),
           name: nameController.text,
           placeName: (locationState as LocationLoaded).placeName,
-          latitude: locationState.position.latitude,
-          longitude: locationState.position.longitude,
-          contactNumber: contactNumberController.text,
+          latitude: (locationState as LocationLoaded).position.latitude, // Updated to use LatLng
+          longitude: (locationState as LocationLoaded).position.longitude, // Updated to use LatLng
+          contactNumber: getFullPhoneNumber(),
           description: descriptionController.text,
           facilities: _facilities,
           occupantsId: [],
@@ -188,7 +198,23 @@ class HostelFormController {
 
   void initializeWithHostel(HostelEntity hostel) {
     nameController.text = hostel.name;
-    contactNumberController.text = hostel.contactNumber;
+    // Assuming contactNumber in HostelEntity включает country code (e.g., "+1234567890")
+    // Extract phone number without country code (basic approach, adjust if format varies)
+    final phoneNumber = hostel.contactNumber;
+    if (phoneNumber.startsWith('+')) {
+      // Simple heuristic: assume country code is until first 1-4 digits
+      final match = RegExp(r'^\+\d{1,4}').firstMatch(phoneNumber);
+      if (match != null) {
+        _countryCode = match.group(0);
+        contactNumberController.text = phoneNumber.substring(_countryCode!.length);
+      } else {
+        _countryCode = '+91'; // Fallback
+        contactNumberController.text = phoneNumber;
+      }
+    } else {
+      _countryCode = '+91'; // Fallback
+      contactNumberController.text = phoneNumber;
+    }
     descriptionController.text = hostel.description;
     _facilities.addAll(hostel.facilities);
     _rooms.addAll(hostel.rooms);
@@ -230,9 +256,9 @@ class HostelFormController {
           id: hostel.id,
           name: nameController.text,
           placeName: (locationState as LocationLoaded).placeName,
-          latitude: locationState.position.latitude,
-          longitude: locationState.position.longitude,
-          contactNumber: contactNumberController.text,
+          latitude: (locationState as LocationLoaded).position.latitude, // Updated to use LatLng
+          longitude: (locationState as LocationLoaded).position.longitude, // Updated to use LatLng
+          contactNumber: getFullPhoneNumber(),
           description: descriptionController.text,
           facilities: _facilities,
           rooms: _rooms,
