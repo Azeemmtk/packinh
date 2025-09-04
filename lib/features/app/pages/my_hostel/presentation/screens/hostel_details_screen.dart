@@ -163,6 +163,7 @@ class HostelDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       SingleChildScrollView(
+                        padding: EdgeInsets.all(padding),
                         child: Builder(
                           builder: (blocContext) => BlocConsumer<ReviewBloc, ReviewState>(
                             listener: (context, state) {
