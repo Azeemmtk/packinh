@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:packinh/features/app/pages/account/presentation/screens/report_screen.dart';
 import '../../../../../../core/constants/colors.dart';
 import '../../../../../../core/constants/const.dart';
 import '../../../../../auth/presentation/provider/bloc/auth_bloc.dart';
@@ -21,6 +22,14 @@ class ProfileListItems extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => ProfileScreen(),
+            ),
+          );
+        }
+        if (text == 'reports') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ReportScreen(),
             ),
           );
         }

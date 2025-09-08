@@ -3,12 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart' as google_sign_in_package;
 import 'package:packinh/core/services/local_storage_service.dart';
+import 'package:packinh/features/app/pages/account/data/datasource/report_data_source.dart';
 import 'package:packinh/features/app/pages/account/data/datasource/user_profile_remote_data_source.dart';
+import 'package:packinh/features/app/pages/account/data/repository/report_repository_impl.dart';
 import 'package:packinh/features/app/pages/account/data/repository/user_profile_repository_impl.dart';
+import 'package:packinh/features/app/pages/account/domain/repository/report_repository.dart';
 import 'package:packinh/features/app/pages/account/domain/repository/user_profile_repository.dart';
+import 'package:packinh/features/app/pages/account/domain/usecases/fetch_user_report_use_case.dart';
 import 'package:packinh/features/app/pages/account/domain/usecases/get_user_use_case.dart';
 import 'package:packinh/features/app/pages/account/domain/usecases/update_user_use_case.dart';
 import 'package:packinh/features/app/pages/account/presentation/provider/bloc/profile/profile_bloc.dart';
+import 'package:packinh/features/app/pages/account/presentation/provider/bloc/report/report_bloc.dart';
 import 'package:packinh/features/app/pages/chat/data/datasource/chat_remote_data_source.dart';
 import 'package:packinh/features/app/pages/chat/data/datasource/owner_remote_data_source.dart';
 import 'package:packinh/features/app/pages/chat/data/repository/chat_repository_impl.dart';
@@ -127,6 +132,10 @@ Future<void> initializeDependencies() async {
         () => UserProfileRemoteDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
   );
 
+  getIt.registerLazySingleton<ReportDataSource>(
+        () => ReportDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
+  );
+
   // Repositories
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(remoteDataSource: getIt<AuthRemoteDataSource>()),
@@ -156,6 +165,10 @@ Future<void> initializeDependencies() async {
 
   getIt.registerLazySingleton<UserProfileRepository>(
         () => UserProfileRepositoryImpl(remoteDataSource: getIt<UserProfileRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<ReportRepository>(
+        () => ReportRepositoryImpl(dataSource: getIt<ReportDataSource>(),cloudinaryService: getIt<CloudinaryService>()),
   );
 
 
@@ -205,11 +218,14 @@ Future<void> initializeDependencies() async {
   getIt.registerLazySingleton(() => GetUserUseCase(getIt<UserProfileRepository>()),);
   getIt.registerLazySingleton(() => UpdateUserUseCase(getIt<UserProfileRepository>()),);
 
+  //report
+  getIt.registerLazySingleton(() => FetchUserReportsUseCase(getIt<ReportRepository>()),);
 
 
 
 
-  // BLoCs
+
+  /// BLoCs
   getIt.registerFactory(
     () => EmailAuthBloc(
       signInWithEmail: getIt<SignInWithEmail>(),
@@ -278,6 +294,7 @@ Future<void> initializeDependencies() async {
 
   getIt.registerFactory(() => EditProfileBloc( updateUserUseCase: getIt<UpdateUserUseCase>()));
   getIt.registerFactory(() => ProfileBloc( getUserUseCase: getIt<GetUserUseCase>()));
+  getIt.registerFactory(() => ReportBloc( fetchUserReportsUseCase: getIt<FetchUserReportsUseCase>()));
 
 
 

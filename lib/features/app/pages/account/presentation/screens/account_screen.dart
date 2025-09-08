@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/constants/const.dart';
 import '../../../../../../core/widgets/custom_app_bar_widget.dart';
 import '../../../../../auth/presentation/provider/bloc/auth_bloc.dart';
-import '../../../../../auth/presentation/provider/bloc/email/email_auth_state.dart';
-import '../../../../../auth/presentation/screens/sign_in_screen.dart';
 import '../widgets/logout_button_widget.dart';
 import '../widgets/profile_list_items.dart';
 
@@ -15,7 +13,7 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const list = [
       'Profile',
-      'Favourite',
+      'reports',
       'Add Compliant',
       'Help',
       'About',
