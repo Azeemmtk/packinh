@@ -3,6 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart' as google_sign_in_package;
 import 'package:packinh/core/services/local_storage_service.dart';
+import 'package:packinh/features/app/pages/account/data/datasource/user_profile_remote_data_source.dart';
+import 'package:packinh/features/app/pages/account/data/repository/user_profile_repository_impl.dart';
+import 'package:packinh/features/app/pages/account/domain/repository/user_profile_repository.dart';
+import 'package:packinh/features/app/pages/account/domain/usecases/get_user_use_case.dart';
+import 'package:packinh/features/app/pages/account/domain/usecases/update_user_use_case.dart';
+import 'package:packinh/features/app/pages/account/presentation/provider/bloc/profile/profile_bloc.dart';
 import 'package:packinh/features/app/pages/chat/data/datasource/chat_remote_data_source.dart';
 import 'package:packinh/features/app/pages/chat/data/datasource/owner_remote_data_source.dart';
 import 'package:packinh/features/app/pages/chat/data/repository/chat_repository_impl.dart';
@@ -55,6 +61,7 @@ import 'package:packinh/features/auth/presentation/provider/bloc/google/google_a
 import 'package:packinh/features/auth/presentation/provider/bloc/otp/otp_auth_bloc.dart';
 import 'package:packinh/features/auth/presentation/provider/cubit/otp_cubit.dart';
 import 'package:packinh/features/auth/presentation/provider/cubit/sign_up_cubit.dart';
+import '../../features/app/pages/account/presentation/provider/bloc/edit_profile/edit_profile_bloc.dart';
 import '../../features/app/pages/bookings/data/datasourse/occupants_remote_data_source.dart';
 import '../../features/app/pages/bookings/data/repository/occupant_repository_impl.dart';
 import '../../features/app/pages/bookings/domain/repository/occupant_repository.dart';
@@ -66,6 +73,7 @@ import '../../features/app/pages/chat/presentation/providers/bloc/allchats/all_c
 import '../../features/app/pages/chat/presentation/providers/bloc/chat/chat_bloc.dart';
 import '../../features/auth/domain/usecase/send-otp.dart';
 import '../services/cloudinary_services.dart';
+import '../services/image_picker_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -80,6 +88,7 @@ Future<void> initializeDependencies() async {
 
   // Services
   getIt.registerLazySingleton<LocalStorageService>(() => LocalStorageService());
+  getIt.registerLazySingleton<ImagePickerService>(() => ImagePickerService());
   getIt.registerLazySingleton<CloudinaryService>(() => CloudinaryService());
 
   // Data Sources
@@ -114,6 +123,10 @@ Future<void> initializeDependencies() async {
         () => ReviewRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
   );
 
+  getIt.registerLazySingleton<UserProfileRemoteDataSource>(
+        () => UserProfileRemoteDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
+  );
+
   // Repositories
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(remoteDataSource: getIt<AuthRemoteDataSource>()),
@@ -139,6 +152,10 @@ Future<void> initializeDependencies() async {
 
   getIt.registerLazySingleton<ReviewRepository>(
         () => ReviewRepositoryImpl(getIt<ReviewRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<UserProfileRepository>(
+        () => UserProfileRepositoryImpl(remoteDataSource: getIt<UserProfileRemoteDataSource>()),
   );
 
 
@@ -183,6 +200,10 @@ Future<void> initializeDependencies() async {
 
 
   getIt.registerLazySingleton(() => GetReviewsUseCase(getIt<ReviewRepository>()),);
+
+
+  getIt.registerLazySingleton(() => GetUserUseCase(getIt<UserProfileRepository>()),);
+  getIt.registerLazySingleton(() => UpdateUserUseCase(getIt<UserProfileRepository>()),);
 
 
 
@@ -254,6 +275,9 @@ Future<void> initializeDependencies() async {
   );
 
   getIt.registerFactory(() => ReviewBloc(getReviewsUseCase: getIt<GetReviewsUseCase>()));
+
+  getIt.registerFactory(() => EditProfileBloc( updateUserUseCase: getIt<UpdateUserUseCase>()));
+  getIt.registerFactory(() => ProfileBloc( getUserUseCase: getIt<GetUserUseCase>()));
 
 
 

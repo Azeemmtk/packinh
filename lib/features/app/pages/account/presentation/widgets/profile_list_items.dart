@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/constants/colors.dart';
 import '../../../../../../core/constants/const.dart';
 import '../../../../../auth/presentation/provider/bloc/auth_bloc.dart';
+import '../screens/profile_screen.dart';
 
 class ProfileListItems extends StatelessWidget {
   const ProfileListItems(
@@ -14,7 +15,16 @@ class ProfileListItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        if (text == 'Profile') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfileScreen(),
+            ),
+          );
+        }
+      },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

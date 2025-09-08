@@ -15,6 +15,7 @@ class UserModel extends UserEntity {
     super.address,
     super.role,
     super.profileImageUrl,
+    super.walletBalance,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -31,6 +32,7 @@ class UserModel extends UserEntity {
       address: json['address'],
       role: json['role'] ?? 'hostel_owner',
       profileImageUrl: json['profileImageUrl'],
+      walletBalance: json['walletBalance'],
     );
   }
 
@@ -53,6 +55,7 @@ class UserModel extends UserEntity {
       address: data['address'],
       role: data['role'] ?? 'hostel_owner',
       profileImageUrl: data['profileImageUrl'],
+      walletBalance: data['walletBalance'],
     );
   }
 
@@ -72,6 +75,7 @@ class UserModel extends UserEntity {
       'profileImageUrl': profileImageUrl,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
+      'walletBalance': walletBalance,
     };
   }
 
@@ -96,6 +100,7 @@ class UserModel extends UserEntity {
       address: entity.address,
       role: entity.role,
       profileImageUrl: entity.profileImageUrl,
+      walletBalance: entity.walletBalance,
     );
   }
 
@@ -120,6 +125,7 @@ class UserModel extends UserEntity {
       address: null, // Empty - to be filled later
       role: 'hostel_owner', // Default role for packinh app
       profileImageUrl: photoURL, // Use Google photo as initial profile image
+      walletBalance: 0.0,
     );
   }
 }

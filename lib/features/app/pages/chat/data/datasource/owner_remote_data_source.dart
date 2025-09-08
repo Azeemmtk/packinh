@@ -23,7 +23,7 @@ class OwnerRemoteDataSourceImpl implements OwnerRemoteDataSource {
       final data = ownerDoc.data() as Map<String, dynamic>;
       return {
         'displayName': data['displayName']?.toString() ?? 'Unknown',
-        'photoURL': data['photoURL']?.toString() ?? '', // Correct field name: photoURL
+        'photoURL': data['photoURL']?.toString() ?? '',
       };
     } catch (e) {
       throw ServerException(e.toString());
