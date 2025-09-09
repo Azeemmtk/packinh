@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:packinh/features/app/pages/account/presentation/screens/expense_screen.dart';
 import 'package:packinh/features/app/pages/account/presentation/screens/report_screen.dart';
 import '../../../../../../core/constants/colors.dart';
 import '../../../../../../core/constants/const.dart';
@@ -30,6 +31,15 @@ class ProfileListItems extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => ReportScreen(),
+            ),
+          );
+        }
+
+        if (text == 'Add Expense') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ExpenseScreen(),
             ),
           );
         }

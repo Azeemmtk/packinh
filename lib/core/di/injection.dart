@@ -3,15 +3,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart' as google_sign_in_package;
 import 'package:packinh/core/services/local_storage_service.dart';
+import 'package:packinh/features/app/pages/account/data/datasource/expense_remote_data_source.dart';
 import 'package:packinh/features/app/pages/account/data/datasource/report_data_source.dart';
 import 'package:packinh/features/app/pages/account/data/datasource/user_profile_remote_data_source.dart';
+import 'package:packinh/features/app/pages/account/data/repository/expense_repository_impl.dart';
 import 'package:packinh/features/app/pages/account/data/repository/report_repository_impl.dart';
 import 'package:packinh/features/app/pages/account/data/repository/user_profile_repository_impl.dart';
+import 'package:packinh/features/app/pages/account/domain/repository/expense_repository.dart';
 import 'package:packinh/features/app/pages/account/domain/repository/report_repository.dart';
 import 'package:packinh/features/app/pages/account/domain/repository/user_profile_repository.dart';
+import 'package:packinh/features/app/pages/account/domain/usecases/add_expense_use_case.dart';
+import 'package:packinh/features/app/pages/account/domain/usecases/delete_expense_use_case.dart';
+import 'package:packinh/features/app/pages/account/domain/usecases/fetch_expense_use_case.dart';
+import 'package:packinh/features/app/pages/account/domain/usecases/fetch_hostel_usecase.dart';
 import 'package:packinh/features/app/pages/account/domain/usecases/fetch_user_report_use_case.dart';
 import 'package:packinh/features/app/pages/account/domain/usecases/get_user_use_case.dart';
 import 'package:packinh/features/app/pages/account/domain/usecases/update_user_use_case.dart';
+import 'package:packinh/features/app/pages/account/presentation/provider/bloc/expense/expense_bloc.dart';
 import 'package:packinh/features/app/pages/account/presentation/provider/bloc/profile/profile_bloc.dart';
 import 'package:packinh/features/app/pages/account/presentation/provider/bloc/report/report_bloc.dart';
 import 'package:packinh/features/app/pages/chat/data/datasource/chat_remote_data_source.dart';
@@ -26,10 +34,15 @@ import 'package:packinh/features/app/pages/chat/domain/usecases/get_messages_use
 import 'package:packinh/features/app/pages/chat/domain/usecases/get_owner_details_use_case.dart';
 import 'package:packinh/features/app/pages/chat/domain/usecases/send_message_use_case.dart';
 import 'package:packinh/features/app/pages/home/data/datasource/dashboard_remote_data_source.dart';
+import 'package:packinh/features/app/pages/home/data/datasource/room%20_availability_remote_data_source.dart';
 import 'package:packinh/features/app/pages/home/data/repository/dashboard_repository.dart';
+import 'package:packinh/features/app/pages/home/data/repository/room_availability_repository_impl.dart';
 import 'package:packinh/features/app/pages/home/domain/repository/dashboard_repository.dart';
+import 'package:packinh/features/app/pages/home/domain/repository/room_availability_repository.dart';
 import 'package:packinh/features/app/pages/home/domain/usecases/fetch_dashboard_data_use_cases.dart';
+import 'package:packinh/features/app/pages/home/domain/usecases/fetch_room_availability_use_case.dart';
 import 'package:packinh/features/app/pages/home/presentation/provider/bloc/dashboard/dashboard_bloc.dart';
+import 'package:packinh/features/app/pages/home/presentation/provider/bloc/roomavailability/room_availability_bloc.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/dataSourse/review_remote_data_source.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/repository/review_repository_impl.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/repository/review_repository.dart';
@@ -146,6 +159,14 @@ Future<void> initializeDependencies() async {
         () => DashboardRemoteDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
   );
 
+  getIt.registerLazySingleton<RoomAvailabilityRemoteDataSource>(
+        () => RoomAvailabilityRemoteDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
+  );
+
+  getIt.registerLazySingleton<ExpenseRemoteDataSource>(
+        () => ExpenseRemoteDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
+  );
+
   /// Repositories
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(remoteDataSource: getIt<AuthRemoteDataSource>()),
@@ -183,6 +204,13 @@ Future<void> initializeDependencies() async {
 
   getIt.registerLazySingleton<DashboardRepository>(
         () => DashboardRepositoryImpl(getIt<DashboardRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton<RoomAvailabilityRepository>(
+        () => RoomAvailabilityRepositoryImpl(getIt<RoomAvailabilityRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<ExpenseRepository>(
+        () => ExpenseRepositoryImpl(getIt<ExpenseRemoteDataSource>()),
   );
 
 
@@ -237,6 +265,15 @@ Future<void> initializeDependencies() async {
 
   //dashboard
   getIt.registerLazySingleton(() => FetchDashboardDataUseCase( getIt<DashboardRepository>()),);
+
+  //room availability
+  getIt.registerLazySingleton(() => FetchRoomAvailabilityUseCase( getIt<RoomAvailabilityRepository>()),);
+
+  //expense
+  getIt.registerLazySingleton(() => AddExpenseUseCase( getIt<ExpenseRepository>()),);
+  getIt.registerLazySingleton(() => DeleteExpenseUseCase( getIt<ExpenseRepository>()),);
+  getIt.registerLazySingleton(() => FetchExpensesUseCase( getIt<ExpenseRepository>()),);
+  getIt.registerLazySingleton(() => FetchHostelsUseCase( getIt<ExpenseRepository>()),);
 
 
 
@@ -316,6 +353,17 @@ Future<void> initializeDependencies() async {
 
   //dashboard
   getIt.registerFactory(() => DashboardBloc( fetchDashboardDataUseCase: getIt<FetchDashboardDataUseCase>()));
+
+  //room availability
+  getIt.registerFactory(() => RoomAvailabilityBloc( fetchRoomAvailabilityUseCase: getIt<FetchRoomAvailabilityUseCase>()));
+
+  //expense
+  getIt.registerFactory(() => ExpenseBloc(
+      addExpenseUseCase: getIt<AddExpenseUseCase>(),
+    deleteExpenseUseCase: getIt<DeleteExpenseUseCase>(),
+    fetchExpensesUseCase: getIt<FetchExpensesUseCase>(),
+    fetchHostelsUseCase: getIt<FetchHostelsUseCase>(),
+  ));
 
 
 

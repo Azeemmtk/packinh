@@ -23,9 +23,7 @@ class MyHostelsScreen extends StatelessWidget {
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async {
-              context
-                  .read<MyHostelsBloc>()
-                  .add(FetchMyHostels(CurrentUser().uId ?? ''));
+              context.read<MyHostelsBloc>().add(FetchMyHostels(CurrentUser().uId ?? ''));
               return Future.delayed(const Duration(seconds: 1));
             },
             child: Padding(

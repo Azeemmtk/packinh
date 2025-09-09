@@ -14,7 +14,7 @@ class AccountScreen extends StatelessWidget {
     const list = [
       'Profile',
       'reports',
-      'Add Compliant',
+      'Add Expense',
       'Help',
       'About',
       'Terms & Policy',

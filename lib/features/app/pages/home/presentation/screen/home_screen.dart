@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/di/injection.dart';
 import 'package:packinh/core/widgets/title_text_widget.dart';
+import 'package:packinh/features/app/pages/home/presentation/screen/room_availability_screen.dart';
 import 'package:packinh/features/app/pages/home/presentation/widgets/build_status_card.dart';
 import '../provider/bloc/dashboard/dashboard_bloc.dart';
 import '../widgets/home_custom_appbar_widget.dart';
@@ -16,9 +19,13 @@ class HomeScreen extends StatelessWidget {
       create: (context) => getIt<DashboardBloc>()..add(FetchDashboardData()),
       child: Scaffold(
         backgroundColor: Colors.grey[100],
+        appBar: PreferredSize(
+          preferredSize: Size(double.infinity, height * 0.18),
+          child: HomeCustomAppbarWidget(),
+        ),
         body: Column(
           children: [
-            const HomeCustomAppbarWidget(),
+            height10,
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
@@ -29,6 +36,7 @@ class HomeScreen extends StatelessWidget {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is DashboardLoaded) {
                         final data = state.dashboardData;
+                        final maxY = (data.receivedAmount + data.pendingAmount) * 1.2;
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,6 +121,162 @@ class HomeScreen extends StatelessWidget {
                             const Align(
                               alignment: Alignment.centerLeft,
                               child: TitleTextWidget(title: "Revenue"),
+                            ),
+                            // Revenue Bar Chart
+                            Container(
+                              height: 250,
+                              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: BarChart(
+                                BarChartData(
+                                  alignment: BarChartAlignment.spaceAround,
+                                  maxY: maxY < 1 ? 100 : maxY,
+                                  minY: 0,
+                                  barTouchData: BarTouchData(
+                                    enabled: true,
+                                    touchTooltipData: BarTouchTooltipData(
+                                      getTooltipColor: (_) => Colors.grey[800]!,
+                                      tooltipPadding: const EdgeInsets.all(8),
+                                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                                        String label = group.x == 0 ? 'Received' : 'Pending';
+                                        return BarTooltipItem(
+                                          '$label\n${rod.toY.toStringAsFixed(0)}',
+                                          const TextStyle(color: Colors.white),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  titlesData: FlTitlesData(
+                                    leftTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        reservedSize: 40,
+                                        getTitlesWidget: (value, meta) {
+                                          return Text(
+                                            value.toInt().toString(),
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                            ),
+                                          );
+                                        },
+                                        interval: maxY / 5 < 1 ? 20 : maxY / 5,
+                                      ),
+                                    ),
+                                    topTitles: AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false),
+                                    ),
+                                    rightTitles: AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false),
+                                    ),
+                                    bottomTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        reservedSize: 30,
+                                        getTitlesWidget: (value, meta) {
+                                          String text = value.toInt() == 0 ? 'Received' : 'Pending';
+                                          return Padding(
+                                            padding: const EdgeInsets.only(top: 8.0),
+                                            child: Text(
+                                              text,
+                                              style: const TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  borderData: FlBorderData(
+                                    show: true,
+                                    border: Border.all(color: Colors.grey[300]!, width: 1),
+                                  ),
+                                  gridData: FlGridData(
+                                    show: true,
+                                    drawHorizontalLine: true,
+                                    drawVerticalLine: false,
+                                    horizontalInterval: maxY / 5 < 1 ? 20 : maxY / 5,
+                                    getDrawingHorizontalLine: (value) {
+                                      return FlLine(
+                                        color: Colors.grey[200],
+                                        strokeWidth: 1,
+                                      );
+                                    },
+                                  ),
+                                  barGroups: [
+                                    BarChartGroupData(
+                                      x: 0,
+                                      barRods: [
+                                        BarChartRodData(
+                                          toY: data.receivedAmount,
+                                          color: Colors.green[400],
+                                          width: 35,
+                                          borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
+                                          gradient: LinearGradient(
+                                            colors: [Colors.green[600]!, Colors.green[300]!],
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    BarChartGroupData(
+                                      x: 1,
+                                      barRods: [
+                                        BarChartRodData(
+                                          toY: data.pendingAmount,
+                                          color: Colors.red[400],
+                                          width: 35,
+                                          borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
+                                          gradient: LinearGradient(
+                                            colors: [Colors.red[600]!, Colors.red[300]!],
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            height20,
+                            // Room Availability Button
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const RoomAvailabilityScreen(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: mainColor,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                'View Room Availability',
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
                             ),
                           ],
                         );
