@@ -7,6 +7,7 @@ import 'package:packinh/core/di/injection.dart';
 import 'package:packinh/core/widgets/title_text_widget.dart';
 import 'package:packinh/features/app/pages/home/presentation/screen/room_availability_screen.dart';
 import 'package:packinh/features/app/pages/home/presentation/widgets/build_status_card.dart';
+import '../../../account/presentation/screens/expense_screen.dart';
 import '../provider/bloc/dashboard/dashboard_bloc.dart';
 import '../widgets/home_custom_appbar_widget.dart';
 
@@ -21,7 +22,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.grey[100],
         appBar: PreferredSize(
           preferredSize: Size(double.infinity, height * 0.18),
-          child: HomeCustomAppbarWidget(),
+          child: const HomeCustomAppbarWidget(),
         ),
         body: Column(
           children: [
@@ -36,7 +37,8 @@ class HomeScreen extends StatelessWidget {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is DashboardLoaded) {
                         final data = state.dashboardData;
-                        final maxY = (data.receivedAmount + data.pendingAmount) * 1.2;
+                        final maxY = (data.receivedAmount + data.pendingAmount + data.expenses) * 1.2;
+                        final netProfit = data.receivedAmount - data.expenses;
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,9 +122,9 @@ class HomeScreen extends StatelessWidget {
                             height20,
                             const Align(
                               alignment: Alignment.centerLeft,
-                              child: TitleTextWidget(title: "Revenue"),
+                              child: TitleTextWidget(title: "Financial Overview"),
                             ),
-                            // Revenue Bar Chart
+                            // Financial Bar Chart
                             Container(
                               height: 250,
                               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -149,7 +151,11 @@ class HomeScreen extends StatelessWidget {
                                       getTooltipColor: (_) => Colors.grey[800]!,
                                       tooltipPadding: const EdgeInsets.all(8),
                                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                                        String label = group.x == 0 ? 'Received' : 'Pending';
+                                        String label = group.x == 0
+                                            ? 'Received'
+                                            : group.x == 1
+                                            ? 'Pending'
+                                            : 'Expenses';
                                         return BarTooltipItem(
                                           '$label\n${rod.toY.toStringAsFixed(0)}',
                                           const TextStyle(color: Colors.white),
@@ -174,10 +180,10 @@ class HomeScreen extends StatelessWidget {
                                         interval: maxY / 5 < 1 ? 20 : maxY / 5,
                                       ),
                                     ),
-                                    topTitles: AxisTitles(
+                                    topTitles: const AxisTitles(
                                       sideTitles: SideTitles(showTitles: false),
                                     ),
-                                    rightTitles: AxisTitles(
+                                    rightTitles: const AxisTitles(
                                       sideTitles: SideTitles(showTitles: false),
                                     ),
                                     bottomTitles: AxisTitles(
@@ -185,7 +191,11 @@ class HomeScreen extends StatelessWidget {
                                         showTitles: true,
                                         reservedSize: 30,
                                         getTitlesWidget: (value, meta) {
-                                          String text = value.toInt() == 0 ? 'Received' : 'Pending';
+                                          String text = value.toInt() == 0
+                                              ? 'Received'
+                                              : value.toInt() == 1
+                                              ? 'Pending'
+                                              : 'Expenses';
                                           return Padding(
                                             padding: const EdgeInsets.only(top: 8.0),
                                             child: Text(
@@ -224,7 +234,7 @@ class HomeScreen extends StatelessWidget {
                                         BarChartRodData(
                                           toY: data.receivedAmount,
                                           color: Colors.green[400],
-                                          width: 35,
+                                          width: 25,
                                           borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
                                           gradient: LinearGradient(
                                             colors: [Colors.green[600]!, Colors.green[300]!],
@@ -240,7 +250,7 @@ class HomeScreen extends StatelessWidget {
                                         BarChartRodData(
                                           toY: data.pendingAmount,
                                           color: Colors.red[400],
-                                          width: 35,
+                                          width: 25,
                                           borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
                                           gradient: LinearGradient(
                                             colors: [Colors.red[600]!, Colors.red[300]!],
@@ -250,8 +260,52 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
+                                    BarChartGroupData(
+                                      x: 2,
+                                      barRods: [
+                                        BarChartRodData(
+                                          toY: data.expenses,
+                                          color: Colors.blue[400],
+                                          width: 25,
+                                          borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
+                                          gradient: LinearGradient(
+                                            colors: [Colors.blue[600]!, Colors.blue[300]!],
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
+                              ),
+                            ),
+                            height10,
+                            // Net Profit/Loss
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Net Profit/Loss:',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  Text(
+                                    netProfit >= 0
+                                        ? '+${netProfit.toStringAsFixed(0)}'
+                                        : netProfit.toStringAsFixed(0),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: netProfit >= 0 ? Colors.green[600] : Colors.red[600],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             height20,
@@ -275,6 +329,30 @@ class HomeScreen extends StatelessWidget {
                               ),
                               child: const Text(
                                 'View Room Availability',
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                            height10,
+                            // Expenses Button
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ExpenseScreen(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: mainColor,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                'View Expenses',
                                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                               ),
                             ),

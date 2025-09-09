@@ -1,20 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:packinh/core/error/exceptions.dart';
 import 'package:packinh/core/services/current_user.dart';
-import 'package:packinh/features/app/pages/home/domain/entity/dashboard_data.dart';
+import 'package:packinh/core/model/hostel_model.dart';
+
+import '../../domain/entity/dashboard_data.dart';
 
 abstract class DashboardRemoteDataSource {
   Future<DashboardData> fetchDashboardData();
 }
 
-class DashboardRemoteDataSourceImpl extends DashboardRemoteDataSource {
+class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
   final FirebaseFirestore firestore;
 
   DashboardRemoteDataSourceImpl({required this.firestore});
 
   @override
   Future<DashboardData> fetchDashboardData() async {
-    try{
+    try {
       final userId = CurrentUser().uId;
 
       //fetch hostels of the user
@@ -29,6 +31,7 @@ class DashboardRemoteDataSourceImpl extends DashboardRemoteDataSource {
           rentPendingCount: 0,
           receivedAmount: 0,
           pendingAmount: 0,
+          expenses: 0,
         );
       }
 
@@ -68,15 +71,31 @@ class DashboardRemoteDataSourceImpl extends DashboardRemoteDataSource {
           pendingAmount += rent;
         }
       }
+
+      // Fetch expenses for these hostels
+      double expenses = 0.0;
+      if (hostelIds.isNotEmpty) {
+        final expenseQuery = await firestore
+            .collection('expenses')
+            .where('hostelId', whereIn: hostelIds)
+            .get();
+        for (var doc in expenseQuery.docs) {
+          final data = doc.data();
+          expenses += (data['amount'] as num?)?.toDouble() ?? 0.0;
+        }
+      }
+
+
       return DashboardData(
         occupantsCount: occupantCount,
         rentPaidCount: rentPaidOccupant.length,
         rentPendingCount: rentPendingCount,
         receivedAmount: receivedAmount,
         pendingAmount: pendingAmount,
+        expenses: expenses,
       );
-    } catch (e){
-      throw ServerException('Failed to fetch dashBoard data $e');
+    } catch (e) {
+      throw ServerException('Failed to fetch dashboard data: $e');
     }
   }
 }

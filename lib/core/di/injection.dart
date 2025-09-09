@@ -35,7 +35,7 @@ import 'package:packinh/features/app/pages/chat/domain/usecases/get_owner_detail
 import 'package:packinh/features/app/pages/chat/domain/usecases/send_message_use_case.dart';
 import 'package:packinh/features/app/pages/home/data/datasource/dashboard_remote_data_source.dart';
 import 'package:packinh/features/app/pages/home/data/datasource/room%20_availability_remote_data_source.dart';
-import 'package:packinh/features/app/pages/home/data/repository/dashboard_repository.dart';
+import 'package:packinh/features/app/pages/home/data/repository/dashboard_repository_impl.dart';
 import 'package:packinh/features/app/pages/home/data/repository/room_availability_repository_impl.dart';
 import 'package:packinh/features/app/pages/home/domain/repository/dashboard_repository.dart';
 import 'package:packinh/features/app/pages/home/domain/repository/room_availability_repository.dart';

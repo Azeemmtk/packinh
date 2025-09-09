@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-
 import '../../../../../../core/error/failures.dart';
 import '../../domain/entity/dashboard_data.dart';
 import '../../domain/repository/dashboard_repository.dart';
@@ -20,4 +19,3 @@ class DashboardRepositoryImpl implements DashboardRepository {
     }
   }
 }
-

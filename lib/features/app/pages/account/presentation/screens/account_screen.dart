@@ -35,7 +35,7 @@ class AccountScreen extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    height: height * 0.5,
+                    height: height * 0.45,
                     child: ListView.separated(
                       padding: EdgeInsets.zero,
                       itemBuilder: (context, index) {
