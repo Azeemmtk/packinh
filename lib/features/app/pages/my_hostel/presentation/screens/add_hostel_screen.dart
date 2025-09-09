@@ -57,12 +57,15 @@ class _AddHostelScreenState extends State<AddHostelScreen> {
           }
         },
         child: Scaffold(
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight),
+            child:  CustomAppBarWidget(title: 'Add Hostel'),
+          ),
           body: Form(
             key: _formKey,
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const CustomAppBarWidget(title: 'Add Hostel'),
                   Padding(
                     padding: EdgeInsets.all(padding),
                     child: Column(

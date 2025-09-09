@@ -29,7 +29,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController _addressController;
   File? _selectedImage;
   final _formKey = GlobalKey<FormState>();
-  final editProfileBloc = GetIt.instance<EditProfileBloc>(); // Retrieve once at initialization
+  final editProfileBloc = GetIt.instance<EditProfileBloc>();
 
   @override
   void initState() {
@@ -54,10 +54,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _pickAndUploadImage() async {
     try {
       final imagePicker = GetIt.instance<ImagePickerService>();
-      final image = await imagePicker.showImageSourceDialog(context);
-      if (image != null) {
+      final images = await imagePicker.showImageSourceDialog(context);
+      if (images != null && images.isNotEmpty) {
         setState(() {
-          _selectedImage = image;
+          _selectedImage = images[0]; // Take the first image
         });
       }
     } catch (e) {
@@ -221,16 +221,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     displayName: _nameController.text,
                                     photoURL: photoURL,
                                     emailVerified: widget.user.emailVerified,
-                                    name: null, // Removed as per requirement
+                                    name: null,
                                     phone: _phoneController.text.isEmpty ? null : _phoneController.text,
                                     phoneVerified: widget.user.phoneVerified,
                                     age: int.tryParse(_ageController.text),
                                     address: _addressController.text.isEmpty ? null : _addressController.text,
                                     role: widget.user.role,
-                                    profileImageUrl: null, // Set to null as photoURL is used
+                                    profileImageUrl: null,
                                     walletBalance: widget.user.walletBalance,
                                   );
-                                  innerContext.read<EditProfileBloc>().add(UpdateProfileEvent(updatedUser)); // Use innerContext
+                                  innerContext.read<EditProfileBloc>().add(UpdateProfileEvent(updatedUser));
                                 }
                               },
                               style: ElevatedButton.styleFrom(

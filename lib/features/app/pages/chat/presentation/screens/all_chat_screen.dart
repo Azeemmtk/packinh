@@ -70,9 +70,13 @@ class AllChatScreen extends StatelessWidget {
                                       otherName,
                                       style: TextStyle(fontSize: 18, color: headingTextColor),
                                     ),
-                                    Text(
-                                      lastMessage,
-                                      style: const TextStyle(fontSize: 15),
+                                    SizedBox(
+                                      width: width * 0.64,
+                                      child: Text(
+                                        lastMessage,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 15),
+                                      ),
                                     ),
                                   ],
                                 ),

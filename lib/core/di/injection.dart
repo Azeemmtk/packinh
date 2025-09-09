@@ -25,6 +25,11 @@ import 'package:packinh/features/app/pages/chat/domain/usecases/get_chats_use_ca
 import 'package:packinh/features/app/pages/chat/domain/usecases/get_messages_use_case.dart';
 import 'package:packinh/features/app/pages/chat/domain/usecases/get_owner_details_use_case.dart';
 import 'package:packinh/features/app/pages/chat/domain/usecases/send_message_use_case.dart';
+import 'package:packinh/features/app/pages/home/data/datasource/dashboard_remote_data_source.dart';
+import 'package:packinh/features/app/pages/home/data/repository/dashboard_repository.dart';
+import 'package:packinh/features/app/pages/home/domain/repository/dashboard_repository.dart';
+import 'package:packinh/features/app/pages/home/domain/usecases/fetch_dashboard_data_use_cases.dart';
+import 'package:packinh/features/app/pages/home/presentation/provider/bloc/dashboard/dashboard_bloc.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/dataSourse/review_remote_data_source.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/repository/review_repository_impl.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/repository/review_repository.dart';
@@ -83,7 +88,8 @@ import '../services/image_picker_service.dart';
 final getIt = GetIt.instance;
 
 Future<void> initializeDependencies() async {
-  // External Dependencies
+
+  /// External Dependencies
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   getIt.registerLazySingleton<FirebaseFirestore>(
       () => FirebaseFirestore.instance);
@@ -91,12 +97,12 @@ Future<void> initializeDependencies() async {
     () => google_sign_in_package.GoogleSignIn(scopes: ['email', 'profile']),
   );
 
-  // Services
+  /// Services
   getIt.registerLazySingleton<LocalStorageService>(() => LocalStorageService());
   getIt.registerLazySingleton<ImagePickerService>(() => ImagePickerService());
   getIt.registerLazySingleton<CloudinaryService>(() => CloudinaryService());
 
-  // Data Sources
+  /// Data Sources
   getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(
       firebaseAuth: getIt<FirebaseAuth>(),
@@ -136,7 +142,11 @@ Future<void> initializeDependencies() async {
         () => ReportDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
   );
 
-  // Repositories
+  getIt.registerLazySingleton<DashboardRemoteDataSource>(
+        () => DashboardRemoteDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
+  );
+
+  /// Repositories
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(remoteDataSource: getIt<AuthRemoteDataSource>()),
   );
@@ -171,10 +181,14 @@ Future<void> initializeDependencies() async {
         () => ReportRepositoryImpl(dataSource: getIt<ReportDataSource>(),cloudinaryService: getIt<CloudinaryService>()),
   );
 
+  getIt.registerLazySingleton<DashboardRepository>(
+        () => DashboardRepositoryImpl(getIt<DashboardRemoteDataSource>()),
+  );
 
 
 
-  // Use Cases
+
+  /// Use Cases
   getIt.registerLazySingleton(() => CheckAuthStatus(getIt<AuthRepository>()));
   getIt.registerLazySingleton(
       () => google_sign_in_usecase.GoogleSignIn(getIt<AuthRepository>()));
@@ -220,6 +234,10 @@ Future<void> initializeDependencies() async {
 
   //report
   getIt.registerLazySingleton(() => FetchUserReportsUseCase(getIt<ReportRepository>()),);
+
+  //dashboard
+  getIt.registerLazySingleton(() => FetchDashboardDataUseCase( getIt<DashboardRepository>()),);
+
 
 
 
@@ -296,10 +314,14 @@ Future<void> initializeDependencies() async {
   getIt.registerFactory(() => ProfileBloc( getUserUseCase: getIt<GetUserUseCase>()));
   getIt.registerFactory(() => ReportBloc( fetchUserReportsUseCase: getIt<FetchUserReportsUseCase>()));
 
+  //dashboard
+  getIt.registerFactory(() => DashboardBloc( fetchDashboardDataUseCase: getIt<FetchDashboardDataUseCase>()));
 
 
 
-  // Cubits
+
+
+  /// Cubits
   getIt.registerFactory(() => OtpCubit());
   getIt.registerFactory(() => SignUpCubit());
 }

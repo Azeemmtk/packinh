@@ -4,8 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:packinh/features/app/pages/wallet/data/model/payment_model.dart';
 import 'package:packinh/features/app/pages/wallet/presentation/provider/bloc/rent_bloc.dart';
 import 'package:packinh/features/app/pages/wallet/presentation/screens/payment_details_screen.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../../../core/constants/colors.dart';
 import '../../../../../../core/constants/const.dart';
+import '../../../../../../core/widgets/custom_alert_dialog.dart';
 
 class WalletCardWidget extends StatelessWidget {
   const WalletCardWidget({
@@ -65,6 +67,23 @@ class WalletCardWidget extends StatelessWidget {
                   width: width * 0.35,
                   // height: height * 0.11,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      // Image is loaded
+                      return child;
+                    }
+                    // Show shimmer while loading
+                    return
+                      Shimmer.fromColors(
+                        baseColor: secondaryColor,
+                        direction: ShimmerDirection.ltr,
+                        highlightColor: mainColor,
+                        child: Container(
+                          width: width * 0.35,
+                          color: Colors.white,
+                        ),
+                      );
+                  },
                 ),
               ),
             ),
@@ -125,8 +144,27 @@ class WalletCardWidget extends StatelessWidget {
               child: Center(
                 child: IconButton(
                   onPressed: () async {
-                    if(!payment.paymentStatus ){
-                      context.read<RentBloc>().add(RentPaidEvent(payment.id!));
+                    if (!payment.paymentStatus) {
+
+                      bool? confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomAlertDialog(
+                            title: 'Confirm Payment ',
+                            message: 'Are you sure you want to mark this payment as paid?',
+                            confirmButtonText: 'Confirm',
+                          );
+                        },
+                      );
+
+                      // If user confirms, update the payment status
+                      if (confirm == true) {
+                        context.read<RentBloc>().add(RentPaidEvent(payment.id!));
+                        // Optional: Show success message
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Payment status updated successfully')),
+                        );
+                      }
                     }
                   },
                   icon: Icon(

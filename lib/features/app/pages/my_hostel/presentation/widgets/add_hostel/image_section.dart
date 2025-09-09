@@ -39,19 +39,21 @@ class _ImageSectionState extends State<ImageSection> {
         : List<String>.filled(3, '').asMap().map((i, url) => MapEntry(i, i < widget.initialSmallImageUrls.length ? widget.initialSmallImageUrls[i] : '')).values.toList();
   }
 
-  Future<void> _pickImage({required bool isMainImage, int? smallImageIndex}) async {
-    final File? pickedImage = await _imagePickerService.showImageSourceDialog(context);
-    if (pickedImage != null) {
+  Future<void> _pickImages() async {
+    final List<File>? pickedImages = await _imagePickerService.showImageSourceDialog(context);
+    if (pickedImages != null && pickedImages.isNotEmpty) {
       setState(() {
-        if (isMainImage) {
-          _mainImage = pickedImage;
-          _mainImageUrl = null; // Clear URL since new image is selected
-          widget.onMainImageChanged?.call(_mainImage);
-        } else if (smallImageIndex != null) {
-          _smallImages[smallImageIndex] = pickedImage;
-          _smallImageUrls[smallImageIndex] = ''; // Clear URL for this index
-          widget.onSmallImagesChanged?.call(_smallImages);
+        // Assign the first image as the main image
+        _mainImage = pickedImages[0];
+        _mainImageUrl = null; // Clear URL since new image is selected
+        widget.onMainImageChanged?.call(_mainImage);
+
+        // Assign remaining images to small images (up to 3)
+        for (int i = 0; i < _smallImages.length; i++) {
+          _smallImages[i] = i + 1 < pickedImages.length ? pickedImages[i + 1] : null;
+          _smallImageUrls[i] = ''; // Clear URL for this index
         }
+        widget.onSmallImagesChanged?.call(_smallImages);
       });
     }
   }
@@ -64,7 +66,7 @@ class _ImageSectionState extends State<ImageSection> {
         TitleTextWidget(title: 'Add Images'),
         height20,
         GestureDetector(
-          onTap: () => _pickImage(isMainImage: true),
+          onTap: _pickImages,
           child: Container(
             width: double.infinity,
             height: height * 0.20,
@@ -87,7 +89,7 @@ class _ImageSectionState extends State<ImageSection> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(3, (index) {
             return GestureDetector(
-              onTap: () => _pickImage(isMainImage: false, smallImageIndex: index),
+              onTap: _pickImages,
               child: Container(
                 width: width * 0.3 - 3,
                 height: height * 0.12,
