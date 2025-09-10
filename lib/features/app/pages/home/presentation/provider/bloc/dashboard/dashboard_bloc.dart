@@ -18,7 +18,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   Future<void> _onFetchDashboardData(
       FetchDashboardData event, Emitter<DashboardState> emit) async {
     emit(DashboardLoading());
-    final result = await fetchDashboardDataUseCase();
+    final result = await fetchDashboardDataUseCase(fromDate: event.fromDate, toDate: event.toDate);
     result.fold(
           (failure) => emit(DashboardError(_mapFailureToMessage(failure))),
           (dashboardData) => emit(DashboardLoaded(dashboardData)),

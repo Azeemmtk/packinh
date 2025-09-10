@@ -7,6 +7,8 @@ class DashboardData extends Equatable {
   final double receivedAmount;
   final double pendingAmount;
   final double expenses;
+  final DateTime? fromDate;
+  final DateTime? toDate;
 
   const DashboardData({
     required this.occupantsCount,
@@ -15,15 +17,19 @@ class DashboardData extends Equatable {
     required this.receivedAmount,
     required this.pendingAmount,
     required this.expenses,
+    this.fromDate,
+    this.toDate,
   });
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     occupantsCount,
     rentPaidCount,
     rentPendingCount,
     receivedAmount,
     pendingAmount,
     expenses,
+    fromDate,
+    toDate,
   ];
 }

@@ -3,5 +3,5 @@ import '../../../../../../core/error/failures.dart';
 import '../entity/dashboard_data.dart';
 
 abstract class DashboardRepository {
-  Future<Either<Failure, DashboardData>> fetchDashboardData();
+  Future<Either<Failure, DashboardData>> fetchDashboardData({DateTime? fromDate, DateTime? toDate});
 }

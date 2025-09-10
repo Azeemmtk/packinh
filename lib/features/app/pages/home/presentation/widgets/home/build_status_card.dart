@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/constants/colors.dart';
-import '../../../../../../core/constants/const.dart';
+import '../../../../../../../core/constants/colors.dart';
+import '../../../../../../../core/constants/const.dart';
 
 class BuildStatusCard extends StatelessWidget {
   const BuildStatusCard({super.key,

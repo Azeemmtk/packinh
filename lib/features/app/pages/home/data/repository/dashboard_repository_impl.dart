@@ -10,9 +10,9 @@ class DashboardRepositoryImpl implements DashboardRepository {
   DashboardRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, DashboardData>> fetchDashboardData() async {
+  Future<Either<Failure, DashboardData>> fetchDashboardData({DateTime? fromDate, DateTime? toDate}) async {
     try {
-      final dashboardData = await remoteDataSource.fetchDashboardData();
+      final dashboardData = await remoteDataSource.fetchDashboardData(fromDate: fromDate, toDate: toDate);
       return Right(dashboardData);
     } catch (e) {
       return Left(ServerFailure('Failed to fetch dashboard data: $e'));

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/constants/colors.dart';
 import '../../../../../../core/constants/const.dart';
 import '../../../../../../core/di/injection.dart';
+import '../../../../../../core/utils/format_date.dart';
 import '../../../../../../core/widgets/custom_app_bar_widget.dart';
 import '../providers/bloc/allchats/all_chat_bloc.dart';
 import 'individual_chat_screen.dart';
@@ -38,7 +39,7 @@ class AllChatScreen extends StatelessWidget {
                         final otherName = chat.participantsInfo[otherUid]?['name'] ?? 'Unknown';
                         final otherPhoto = chat.participantsInfo[otherUid]?['photo'] ?? '';
                         final lastMessage = chat.lastMessage;
-                        final time = _formatTime(chat.lastTimestamp);
+                        final time = formatTime(chat.lastTimestamp);
 
                         return InkWell(
                           onTap: () {
@@ -105,19 +106,5 @@ class AllChatScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _formatTime(DateTime dateTime) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-    if (difference.inMinutes < 1) {
-      return 'Just now';
-    } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
-    } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
-    } else {
-      return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
-    }
   }
 }
