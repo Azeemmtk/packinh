@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:packinh/core/error/failures.dart';
 import 'package:packinh/core/usecases/usecase.dart';
-import 'package:packinh/features/app/pages/wallet/domain/respository/payment_repository.dart';
+import '../respository/payment_repository.dart';
 
 class UpdatePaymentUseCase extends UseCase<void, UpdateParams> {
   final PaymentRepository repository;

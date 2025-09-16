@@ -49,20 +49,12 @@ import 'package:packinh/features/app/pages/my_hostel/domain/repository/review_re
 import 'package:packinh/features/app/pages/my_hostel/domain/usecases/delete_hostel.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/usecases/get_review_use_case.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/provider/bloc/review/review_bloc.dart';
-import 'package:packinh/features/app/pages/wallet/data/datasources/rent_paid_remote_data_source.dart';
-import 'package:packinh/features/app/pages/wallet/data/respository/payment_repository_impl.dart';
-import 'package:packinh/features/app/pages/wallet/domain/respository/payment_repository.dart';
-import 'package:packinh/features/app/pages/wallet/domain/usecases/get_rent_use_case.dart';
-import 'package:packinh/features/app/pages/wallet/domain/usecases/rent_paid_use_case.dart';
-import 'package:packinh/features/app/pages/wallet/domain/usecases/update_payment_use_case.dart';
-import 'package:packinh/features/app/pages/wallet/presentation/provider/bloc/rent_bloc.dart';
 import 'package:packinh/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:packinh/features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:packinh/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:packinh/features/auth/domain/repository/auth_repository.dart';
 import 'package:packinh/features/auth/domain/usecase/check_auth_status.dart';
-import 'package:packinh/features/auth/domain/usecase/google_sign_in.dart'
-    as google_sign_in_usecase;
+import 'package:packinh/features/auth/domain/usecase/google_sign_in.dart' as google_sign_in_usecase;
 import 'package:packinh/features/auth/domain/usecase/sign_in_with_email.dart';
 import 'package:packinh/features/auth/domain/usecase/sign_out.dart';
 import 'package:packinh/features/auth/domain/usecase/sign_up_with_email.dart';
@@ -83,6 +75,7 @@ import 'package:packinh/features/auth/presentation/provider/bloc/email/email_aut
 import 'package:packinh/features/auth/presentation/provider/bloc/google/google_auth_bloc.dart';
 import 'package:packinh/features/auth/presentation/provider/bloc/otp/otp_auth_bloc.dart';
 import 'package:packinh/features/auth/presentation/provider/cubit/otp_cubit.dart';
+import 'package:packinh/features/auth/presentation/provider/cubit/sign_in_cubit.dart';
 import 'package:packinh/features/auth/presentation/provider/cubit/sign_up_cubit.dart';
 import '../../features/app/pages/account/presentation/provider/bloc/edit_profile/edit_profile_bloc.dart';
 import '../../features/app/pages/bookings/data/datasourse/occupants_remote_data_source.dart';
@@ -94,6 +87,13 @@ import '../../features/app/pages/bookings/presentation/provider/bloc/occupant_de
 import '../../features/app/pages/bookings/presentation/provider/bloc/occupants_bloc/occupants_bloc.dart';
 import '../../features/app/pages/chat/presentation/providers/bloc/allchats/all_chat_bloc.dart';
 import '../../features/app/pages/chat/presentation/providers/bloc/chat/chat_bloc.dart';
+import '../../features/app/pages/payments/data/datasources/rent_paid_remote_data_source.dart';
+import '../../features/app/pages/payments/data/respository/payment_repository_impl.dart';
+import '../../features/app/pages/payments/domain/respository/payment_repository.dart';
+import '../../features/app/pages/payments/domain/usecases/get_rent_use_case.dart';
+import '../../features/app/pages/payments/domain/usecases/rent_paid_use_case.dart';
+import '../../features/app/pages/payments/domain/usecases/update_payment_use_case.dart';
+import '../../features/app/pages/payments/presentation/provider/bloc/rent_bloc.dart';
 import '../../features/auth/domain/usecase/send-otp.dart';
 import '../services/cloudinary_services.dart';
 import '../services/image_picker_service.dart';
@@ -371,5 +371,6 @@ Future<void> initializeDependencies() async {
 
   /// Cubits
   getIt.registerFactory(() => OtpCubit());
+  getIt.registerFactory(() => SignInCubit());
   getIt.registerFactory(() => SignUpCubit());
 }

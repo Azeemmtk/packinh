@@ -11,7 +11,6 @@ class CustomMyHostelCard extends StatelessWidget {
     required this.imageUrl,
     required this.title,
     required this.location,
-    required this.rent,
     required this.rating,
     required this.distance,
     required this.status,
@@ -20,7 +19,6 @@ class CustomMyHostelCard extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String location;
-  final int rent;
   final double rating;
   final int distance;
   final Status status;

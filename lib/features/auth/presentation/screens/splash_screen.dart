@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:packinh/core/constants/const.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import 'package:packinh/features/app/Navigation/presentation/screen/main_screen.dart';
 import 'package:packinh/features/auth/presentation/screens/welcome_screen.dart';
 import '../../../../core/services/local_storage_service.dart';
@@ -117,7 +118,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
           } else if (state is EmailAuthError && mounted) {
             print('SplashScreen: Error state received: ${state.message}');
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error: ${state.message}')),
+              customSnackBar(text: 'Error: ${state.message}')
             );
             Navigator.pushAndRemoveUntil(
               context,

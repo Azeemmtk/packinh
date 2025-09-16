@@ -1,9 +1,9 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:packinh/features/app/pages/wallet/data/model/payment_model.dart';
 import '../../../../../../core/constants/const.dart';
 import '../../../../../../core/widgets/details_row_widget.dart';
 import '../../../../../../core/widgets/title_text_widget.dart';
+import '../../data/model/payment_model.dart';
 
 class PaymentSummeryDetailsWidget extends StatelessWidget {
   final PaymentModel payment;

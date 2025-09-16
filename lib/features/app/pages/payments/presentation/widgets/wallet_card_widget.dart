@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:packinh/features/app/pages/wallet/data/model/payment_model.dart';
-import 'package:packinh/features/app/pages/wallet/presentation/provider/bloc/rent_bloc.dart';
-import 'package:packinh/features/app/pages/wallet/presentation/screens/payment_details_screen.dart';
+import 'package:intl/intl.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../../core/constants/colors.dart';
 import '../../../../../../core/constants/const.dart';
 import '../../../../../../core/widgets/custom_alert_dialog.dart';
+import '../../data/model/payment_model.dart';
+import '../provider/bloc/rent_bloc.dart';
+import '../screens/payment_details_screen.dart';
 
 class WalletCardWidget extends StatelessWidget {
   const WalletCardWidget({
@@ -130,7 +132,7 @@ class WalletCardWidget extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      payment.dueDate.toString().substring(0, 10),
+                      DateFormat('dd-MMM-yyyy').format(payment.dueDate),
                       style: TextStyle(
                         color: Colors.grey[500],
                         fontSize: 14,
@@ -162,7 +164,7 @@ class WalletCardWidget extends StatelessWidget {
                         context.read<RentBloc>().add(RentPaidEvent(payment.id!));
                         // Optional: Show success message
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Payment status updated successfully')),
+                          customSnackBar(text: 'Payment status updated successfully'),
                         );
                       }
                     }

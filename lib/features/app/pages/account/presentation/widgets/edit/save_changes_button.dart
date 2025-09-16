@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 
 import '../../../../../../../core/constants/colors.dart';
 import '../../../../../../../core/constants/const.dart';
@@ -46,10 +47,7 @@ class SaveChangesButton extends StatelessWidget {
               }
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Failed to upload image: $e'),
-                  backgroundColor: Colors.red,
-                ),
+                customSnackBar(text: 'Failed to upload image: $e', color: Colors.red)
               );
               return;
             }

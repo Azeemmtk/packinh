@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import 'package:packinh/features/auth/presentation/screens/sign_in_screen.dart';
 
 import '../../../../core/constants/const.dart';
@@ -64,7 +65,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               _isLoading = false;
             });
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Password updated successfully!')),
+              customSnackBar(text: 'Password updated successfully!'),
             );
             Navigator.pushAndRemoveUntil(
               context,
@@ -76,7 +77,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               _isLoading = false;
             });
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+              customSnackBar(text: state.message)
             );
             if (state.message.contains('Please sign in again')) {
               Navigator.pushAndRemoveUntil(

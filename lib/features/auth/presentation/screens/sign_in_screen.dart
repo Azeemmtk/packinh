@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/constants/const.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import 'package:packinh/features/app/Navigation/presentation/screen/main_screen.dart';
 import 'package:packinh/features/auth/presentation/provider/bloc/email/email_auth_bloc.dart';
 import 'package:packinh/features/auth/presentation/provider/bloc/email/email_auth_event.dart';
@@ -41,26 +42,14 @@ class SignInScreen extends StatelessWidget {
                 );
                 if (fromSignUp) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: mainColor,
-                      content: const Text(
-                        'Signed up successfully! You are now logged in.',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ),
+                    customSnackBar(text: 'Signed up successfully! You are now logged in.')
                   );
                 }
                 context.read<SignInCubit>().setSubmitting(false);
               } else if (state is EmailAuthError) {
                 context.read<SignInCubit>().setSubmitting(false);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: mainColor,
-                    content: Text(
-                      state.message,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ),
+                  customSnackBar(text: state.message,)
                 );
               }
             },
@@ -77,13 +66,7 @@ class SignInScreen extends StatelessWidget {
                 );
               } else if (state is GoogleAuthError) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: mainColor,
-                    content: Text(
-                      state.message,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ),
+                  customSnackBar(text: state.message,)
                 );
               }
             },

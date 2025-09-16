@@ -4,6 +4,7 @@ import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/services/geolocation_services.dart';
 import 'package:packinh/core/widgets/custom_app_bar_widget.dart';
 import 'package:packinh/core/widgets/custom_green_button_widget.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/provider/cubit/location/location_cubit.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/widgets/add_hostel/hostel_details_section.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/widgets/add_hostel/hostel_form_controller.dart';
@@ -43,16 +44,16 @@ class _AddHostelScreenState extends State<AddHostelScreen> {
         listener: (context, state) {
           if (state is AddHostelLoading) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Adding hostel...')),
+              customSnackBar(text: 'Adding hostel...'),
             );
           } else if (state is AddHostelSuccess) {
             Navigator.pop(context,true);
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Hostel added successfully!')),
+              customSnackBar(text: 'Hostel added successfully!'),
             );
           } else if (state is AddHostelError) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+              customSnackBar(text: state.message)
             );
           }
         },

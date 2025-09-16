@@ -16,12 +16,14 @@ class IdProofContainerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: height * 0.2,
+      height: height * 0.23,
+      padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: Colors.black)
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
         child: Image(
           image: NetworkImage(
             image ,

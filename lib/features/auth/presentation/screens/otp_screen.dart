@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import 'package:packinh/features/auth/presentation/screens/sign_in_screen.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/const.dart';
@@ -47,7 +48,7 @@ class OtpScreen extends StatelessWidget {
                 ),
               );
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Verification Successful!')),
+                customSnackBar(text: 'Verification Successful!')
               );
             } else if (state is OtpAuthAuthenticated && status == 'RE') {
               // For registration, proceed with signup
@@ -68,13 +69,11 @@ class OtpScreen extends StatelessWidget {
                     (route) => false,
               );
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content:
-                    Text('Signed up successfully as ${state.user.email}')),
+                customSnackBar(text: 'Signed up successfully as ${state.user.email}')
               );
             } else if (state is OtpAuthError) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
+                customSnackBar(text: state.message)
               );
             }
           },
@@ -119,8 +118,7 @@ class OtpScreen extends StatelessWidget {
                             .add(OtpAuthSendOtp('+91${data['phone']}'));
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Phone number not available')),
+                          customSnackBar(text: 'Phone number not available'),
                         );
                       }
                     },
@@ -145,8 +143,7 @@ class OtpScreen extends StatelessWidget {
                                 .add(OtpAuthVerifyOtp(verificationId, otp));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Please enter the OTP')),
+                              customSnackBar(text: 'Please enter the OTP')
                             );
                           }
                         },

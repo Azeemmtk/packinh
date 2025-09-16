@@ -4,6 +4,7 @@ import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/services/current_user.dart';
 import 'package:packinh/core/widgets/custom_green_button_widget.dart';
 import 'package:packinh/core/entity/hostel_entity.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 
 import '../../provider/bloc/my_hostel/my_hostel_bloc.dart';
 import '../../provider/bloc/my_hostel/my_hostel_event.dart';
@@ -47,7 +48,7 @@ class HostelActionButtons extends StatelessWidget {
               );
             } else if (state is MyHostelsDeletedError) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
+                customSnackBar(text: state.message)
               );
             }
           },

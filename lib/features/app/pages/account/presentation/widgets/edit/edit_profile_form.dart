@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import 'package:packinh/features/app/pages/account/presentation/widgets/edit/save_changes_button.dart';
 
 import '../../../../../../../core/constants/const.dart';
@@ -58,7 +59,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e'), backgroundColor: Colors.red),
+        customSnackBar(text: 'Error picking image: $e', color: Colors.red)
       );
     }
   }

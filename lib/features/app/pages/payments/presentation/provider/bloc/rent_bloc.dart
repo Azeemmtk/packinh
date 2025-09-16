@@ -2,10 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:packinh/features/app/pages/wallet/data/model/payment_model.dart';
-import 'package:packinh/features/app/pages/wallet/domain/usecases/get_rent_use_case.dart';
-import 'package:packinh/features/app/pages/wallet/domain/usecases/rent_paid_use_case.dart';
-import 'package:packinh/features/app/pages/wallet/domain/usecases/update_payment_use_case.dart';
+import '../../../data/model/payment_model.dart';
+import '../../../domain/usecases/get_rent_use_case.dart';
+import '../../../domain/usecases/rent_paid_use_case.dart';
+import '../../../domain/usecases/update_payment_use_case.dart';
 
 part 'rent_event.dart';
 part 'rent_state.dart';

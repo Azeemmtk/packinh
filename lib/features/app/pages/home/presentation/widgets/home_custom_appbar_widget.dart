@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:packinh/core/services/current_user.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import '../../../../../../core/constants/colors.dart';
 import '../../../../../../core/constants/const.dart';
 import '../../../../../auth/presentation/provider/bloc/auth_bloc.dart';
@@ -167,11 +168,7 @@ class HomeCustomAppbarWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.of(dialogContext).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Logged out successfully'),
-                    backgroundColor: Colors.green,
-                    duration: Duration(seconds: 2),
-                  ),
+                  customSnackBar(text: 'Logged out successfully')
                 );
                 context.read<AuthBloc>().add(SignOutEvent());
               },

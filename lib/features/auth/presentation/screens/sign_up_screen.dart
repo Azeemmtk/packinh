@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/constants/const.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import 'package:packinh/features/auth/presentation/provider/bloc/otp/otp_auth_bloc.dart';
 import 'package:packinh/features/auth/presentation/provider/bloc/otp/otp_auth_event.dart';
 import 'package:packinh/features/auth/presentation/provider/bloc/otp/otp_auth_state.dart';
@@ -25,9 +26,7 @@ class SignUpScreen extends StatelessWidget {
           if (state is OtpEmailChecked) {
             if (state.emailExists) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('This account is already registered.'),
-                ),
+                customSnackBar(text: 'This account is already registered.')
               );
             } else {
               // Email doesn't exist, proceed to send OTP
@@ -51,7 +50,7 @@ class SignUpScreen extends StatelessWidget {
             );
           } else if (state is OtpAuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+              customSnackBar(text: state.message)
             );
           }
         },

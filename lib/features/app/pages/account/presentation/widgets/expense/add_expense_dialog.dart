@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 
 import '../../../domain/entity/expense.dart';
 import '../../provider/bloc/expense/expense_bloc.dart';
@@ -11,7 +12,7 @@ void showAddExpenseDialog(BuildContext context) {
 
   if (hostels.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('No hostels available')),
+      customSnackBar(text: 'No hostels available', color: Colors.red)
     );
     return;
   }
@@ -81,7 +82,7 @@ void showAddExpenseDialog(BuildContext context) {
             onPressed: () {
               if (selectedHostelId == null || amountController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please select a hostel and enter an amount')),
+                  customSnackBar(text: 'Please select a hostel and enter an amount',)
                 );
                 return;
               }

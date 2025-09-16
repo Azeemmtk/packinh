@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:packinh/core/error/exceptions.dart';
 import 'package:packinh/core/services/current_user.dart';
-import 'package:packinh/features/app/pages/wallet/data/model/payment_model.dart';
+import '../model/payment_model.dart';
 
 abstract class RentPaidRemoteDataSource {
   Future<List<PaymentModel>> getRent();
@@ -29,24 +29,33 @@ class RentPaidRemoteDataSourceImpl extends RentPaidRemoteDataSource {
   Future<List<PaymentModel>> getRent() async {
     try {
       final String ownerId = CurrentUser().uId!;
+      print('111111111111111');
+      print(ownerId);
       QuerySnapshot snapshot = await firestore
           .collection('hostels')
           .where('ownerId', isEqualTo: ownerId)
           .get();
-      List<String> hostelIds = snapshot.docs
-          .map(
-            (doc) => doc.id,
-          )
-          .toList();
+      print('222222222222');
 
-      QuerySnapshot paymentsSnapShot = await firestore
+      // If no hostels are found, return an empty list
+      if (snapshot.docs.isEmpty) {
+        return [];
+      }
+
+      List<String> hostelIds = snapshot.docs.map((doc) => doc.id).toList();
+
+      // Only proceed with payments query if hostelIds is not empty
+      if (hostelIds.isEmpty) {
+        return [];
+      }
+
+      QuerySnapshot paymentsSnapshot = await firestore
           .collection('payments')
           .where('hostelId', whereIn: hostelIds)
           .get();
 
-      List<PaymentModel> payments = paymentsSnapShot.docs
-          .map((doc) =>
-              PaymentModel.fromJson(doc.data() as Map<String, dynamic>))
+      List<PaymentModel> payments = paymentsSnapshot.docs
+          .map((doc) => PaymentModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
       return payments;
     } catch (e) {

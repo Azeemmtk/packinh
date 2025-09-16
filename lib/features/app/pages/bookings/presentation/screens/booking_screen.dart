@@ -9,8 +9,22 @@ import '../../../my_hostel/presentation/provider/bloc/my_hostel/my_hostel_event.
 import '../../../my_hostel/presentation/provider/bloc/my_hostel/my_hostel_state.dart';
 import '../widgets/hostel_card_widget.dart';
 
-class BookingScreen extends StatelessWidget {
+class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
+
+  @override
+  _BookingScreenState createState() => _BookingScreenState();
+}
+
+class _BookingScreenState extends State<BookingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      BlocProvider.of<MyHostelsBloc>(context).add(FetchMyHostels(userId));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +40,9 @@ class BookingScreen extends StatelessWidget {
             if (state is MyHostelsLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is MyHostelsLoaded) {
+              if (state.hostels.isEmpty) {
+                return const Center(child: Text('Add hostels'));
+              }
               final hostels = state.hostels;
               return Expanded(
                 child: Column(
@@ -49,16 +66,10 @@ class BookingScreen extends StatelessWidget {
             } else if (state is MyHostelsError) {
               return Center(child: Text(state.message));
             } else {
-              // Fetch the current user's ID
+              // Handle initial state or user not logged in
               final userId = FirebaseAuth.instance.currentUser?.uid;
-              if (userId != null) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  BlocProvider.of<MyHostelsBloc>(context)
-                      .add(FetchMyHostels(userId));
-                });
-              } else {
-                return const Center(
-                    child: Text('Please log in to view hostels'));
+              if (userId == null) {
+                return const Center(child: Text('Please log in to view hostels'));
               }
               return const Center(child: CircularProgressIndicator());
             }

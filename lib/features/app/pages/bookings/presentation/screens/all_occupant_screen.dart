@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:packinh/core/di/injection.dart';
 import 'package:packinh/core/widgets/custom_app_bar_widget.dart';
 import 'package:packinh/core/constants/const.dart';
 
+import '../../../../../../core/widgets/custom_lottie.dart';
 import '../provider/bloc/occupants_bloc/occupants_bloc.dart';
 import '../widgets/occupant_card_widget.dart';
 
@@ -21,12 +23,16 @@ class AllOccupantScreen extends StatelessWidget {
         children: [
           CustomAppBarWidget(title: hostelName),
           BlocProvider(
-            create: (context) => getIt<OccupantsBloc>()..add(FetchOccupantsByHostelId(hostelId)),
+            create: (context) =>
+                getIt<OccupantsBloc>()..add(FetchOccupantsByHostelId(hostelId)),
             child: BlocBuilder<OccupantsBloc, OccupantsState>(
               builder: (context, state) {
                 if (state is OccupantsLoading) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is OccupantsLoaded) {
+                  if (state.occupants.isEmpty) {
+                    return CustomLottie(message: 'No data',);
+                  }
                   final occupants = state.occupants;
                   return Expanded(
                     child: Column(
@@ -51,9 +57,8 @@ class AllOccupantScreen extends StatelessWidget {
                   );
                 } else if (state is OccupantsError) {
                   return Center(child: Text(state.message));
-                }
-                else {
-                    return const Center(child: CircularProgressIndicator());
+                } else {
+                  return const Center(child: CircularProgressIndicator());
                 }
               },
             ),

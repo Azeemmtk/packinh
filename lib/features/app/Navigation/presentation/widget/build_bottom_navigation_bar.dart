@@ -51,7 +51,7 @@ class BuildBottomNavigationBar extends StatelessWidget {
           ),
           _buildBottomNavItem(
             icon: Icons.account_balance_wallet,
-            label: 'Wallet',
+            label: 'Payments',
             isActive: currentItem == BottomNavItem.wallet,
             onTap: () => cubit.selectItem(BottomNavItem.wallet),
           ),

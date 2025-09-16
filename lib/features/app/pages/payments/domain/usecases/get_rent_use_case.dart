@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:packinh/core/error/failures.dart';
 import 'package:packinh/core/usecases/usecase.dart';
-import 'package:packinh/features/app/pages/wallet/data/model/payment_model.dart';
-import 'package:packinh/features/app/pages/wallet/domain/respository/payment_repository.dart';
+import '../../data/model/payment_model.dart';
+import '../respository/payment_repository.dart';
 
 class GetRentUseCase implements UseCaseNoParams<List<PaymentModel>> {
   final PaymentRepository repository;

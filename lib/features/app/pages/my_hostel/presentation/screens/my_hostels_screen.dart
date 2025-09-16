@@ -53,9 +53,6 @@ class MyHostelsScreen extends StatelessWidget {
                             imageUrl: hostel.mainImageUrl ?? '',
                             title: hostel.name,
                             location: hostel.placeName,
-                            rent: hostel.rooms.isNotEmpty
-                                ? (hostel.rooms[0]['rate'] as double).toInt()
-                                : 0,
                             rating: hostel.rating ?? 0.0,
                             distance: 0,
                             status: hostel.status,

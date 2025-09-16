@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/di/injection.dart';
-import 'package:packinh/features/app/pages/wallet/presentation/provider/bloc/rent_bloc.dart';
 import '../../../../../../core/constants/const.dart';
 import '../../../../../../core/widgets/custom_app_bar_widget.dart';
+import '../provider/bloc/rent_bloc.dart';
 import '../widgets/wallet_card_widget.dart';
 
 class WalletScreen extends StatelessWidget {
@@ -17,7 +17,7 @@ class WalletScreen extends StatelessWidget {
       body: Column(
         children: [
           CustomAppBarWidget(
-            title: 'Wallet',
+            title: 'Payments',
             enableChat: true,
           ),
           BlocProvider(
@@ -42,7 +42,7 @@ class WalletScreen extends StatelessWidget {
                         } else if (state is RentLoaded) {
                           if (state.payments.isEmpty) {
                             return Center(
-                              child: Text('No payment done yet'),
+                              child: Text('No payment done yet,'),
                             );
                           }
                           return Expanded(
@@ -62,10 +62,15 @@ class WalletScreen extends StatelessWidget {
                           );
                         } else if (state is RentError) {
                           return Center(
-                            child: Text(state.message),
+                            child: Text(
+                              'Add your hostels',
+                            ),
                           );
                         } else {
-                          return Expanded(
+                          return Container(
+                            height: double.infinity,
+                            width: double.infinity,
+                            color: Colors.white,
                             child: Center(
                               child: Text(
                                 'No payment done yet',

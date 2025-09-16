@@ -4,6 +4,7 @@ import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/services/geolocation_services.dart';
 import 'package:packinh/core/widgets/custom_app_bar_widget.dart';
 import 'package:packinh/core/widgets/custom_green_button_widget.dart';
+import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/provider/bloc/my_hostel/my_hostel_bloc.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/provider/bloc/update_hostel/update_hostel_bloc.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/provider/cubit/location/location_cubit.dart';
@@ -59,17 +60,17 @@ class _HostelEditScreenState extends State<HostelEditScreen> {
         listener: (context, state) {
           if (state is UpdateHostelLoading) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Updating hostel...')),
+              customSnackBar(text: 'Updating hostel...')
             );
           } else if (state is UpdateHostelSuccess) {
             // context.read<MyHostelsBloc>().add(FetchMyHostels(CurrentUser().uId ?? ''));
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Hostel updated successfully!')),
+              customSnackBar(text: 'Hostel updated successfully!')
             );
             Navigator.pop(context, true);
           } else if (state is UpdateHostelError) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+              customSnackBar(text: state.message)
             );
           }
         },

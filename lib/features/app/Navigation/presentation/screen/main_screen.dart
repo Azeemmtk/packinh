@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/features/app/Navigation/cubit/bottom_nav_cubit.dart';
 import 'package:packinh/features/app/pages/my_hostel/presentation/screens/my_hostels_screen.dart';
-import 'package:packinh/features/app/pages/wallet/presentation/screens/wallet_screen.dart';
 import '../../../../../core/services/current_user.dart';
 import '../../../pages/bookings/presentation/screens/booking_screen.dart';
 import '../../../pages/account/presentation/screens/account_screen.dart';
@@ -11,6 +10,7 @@ import '../../../pages/home/presentation/screen/home_screen.dart';
 import '../../../pages/my_hostel/presentation/provider/bloc/my_hostel/my_hostel_bloc.dart';
 import '../../../pages/my_hostel/presentation/provider/bloc/my_hostel/my_hostel_event.dart';
 import '../../../pages/my_hostel/presentation/screens/add_hostel_screen.dart';
+import '../../../pages/payments/presentation/screens/payment_screen.dart';
 import '../widget/build_bottom_navigation_bar.dart';
 
 class MainScreen extends StatelessWidget {
