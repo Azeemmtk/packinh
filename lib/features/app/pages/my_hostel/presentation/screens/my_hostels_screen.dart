@@ -34,7 +34,7 @@ class MyHostelsScreen extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is MyHostelsLoaded) {
                     if (state.hostels.isEmpty) {
-                      return const Center(child: Text('No hostels found'));
+                      return const Center(child: Text('Add your hostel'));
                     }
                     return ListView.separated(
                       itemBuilder: (context, index) {

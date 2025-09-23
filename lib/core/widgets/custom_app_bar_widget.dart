@@ -33,7 +33,9 @@ class CustomAppBarWidget extends StatelessWidget {
             enableChat
                 ? width10
                 : IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     icon: const Icon(
                       Icons.arrow_back,
                       size: 30,

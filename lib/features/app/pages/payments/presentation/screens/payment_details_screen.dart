@@ -19,10 +19,14 @@ class PaymentDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          CustomAppBarWidget(title: 'Payment'),
-          Padding(
+      resizeToAvoidBottomInset: true,
+      appBar: PreferredSize(
+        preferredSize: Size(double.infinity, height * 0.18),
+        child: CustomAppBarWidget(title: 'Payment'),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
             padding: EdgeInsets.all(padding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +43,7 @@ class PaymentDetailsScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if(payment.paymentStatus == false)
+                    if (payment.paymentStatus == false)
                       TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -61,7 +65,6 @@ class PaymentDetailsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-
                   ],
                 ),
                 SizedBox(height: height * 0.07),
@@ -72,29 +75,32 @@ class PaymentDetailsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TitleTextWidget(title: 'Due date'),
-                        Text(DateFormat('dd-MMM-yyyy').format(payment.dueDate),),
+                        Text(DateFormat('dd-MMM-yyyy').format(payment.dueDate)),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         TitleTextWidget(title: 'Current date'),
-                        Text(DateFormat('dd-MMM-yyyy').format(DateTime.now()),),
+                        Text(DateFormat('dd-MMM-yyyy').format(DateTime.now())),
                       ],
                     ),
                   ],
                 ),
                 SizedBox(height: height * 0.07),
-                PaymentSummeryDetailsWidget(payment: payment,),
+                PaymentSummeryDetailsWidget(payment: payment),
                 SizedBox(height: height * 0.15),
                 CustomGreenButtonWidget(
                   name: 'Go back',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context); // Fixed: Added navigation logic
+                  },
                 ),
+                SizedBox(height: MediaQuery.of(context).viewInsets.bottom), // Add padding for keyboard
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

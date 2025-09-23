@@ -30,11 +30,16 @@ class _PaymentEditScreenState extends State<PaymentEditScreen> {
   void initState() {
     super.initState();
 
-    dueDateController = TextEditingController(text: widget.payments.dueDate.toString().substring(0, 10));
-    rentController = TextEditingController(text: widget.payments.rent.toString());
-    additionalMessageController = TextEditingController(text: widget.payments.extraMessage ?? '');
-    additionalAmountController = TextEditingController(text: widget.payments.extraAmount?.toString() ?? '');
-    discountAmountController = TextEditingController(text: widget.payments.discount?.toString() ?? '');
+    dueDateController = TextEditingController(
+        text: widget.payments.dueDate.toString().substring(0, 10));
+    rentController =
+        TextEditingController(text: widget.payments.rent.toString());
+    additionalMessageController =
+        TextEditingController(text: widget.payments.extraMessage ?? '');
+    additionalAmountController = TextEditingController(
+        text: widget.payments.extraAmount?.toString() ?? '');
+    discountAmountController =
+        TextEditingController(text: widget.payments.discount?.toString() ?? '');
   }
 
   @override
@@ -61,7 +66,9 @@ class _PaymentEditScreenState extends State<PaymentEditScreen> {
       updatedData['rent'] = newRent;
     }
 
-    final newExtraMessage = additionalMessageController.text.isNotEmpty ? additionalMessageController.text : null;
+    final newExtraMessage = additionalMessageController.text.isNotEmpty
+        ? additionalMessageController.text
+        : null;
     if (newExtraMessage != widget.payments.extraMessage) {
       updatedData['extraMessage'] = newExtraMessage;
     }
@@ -79,9 +86,9 @@ class _PaymentEditScreenState extends State<PaymentEditScreen> {
     // Only dispatch the event if there are changes
     if (updatedData.isNotEmpty) {
       context.read<RentBloc>().add(UpdatePaymentEvent(
-        id: widget.payments.id!,
-        data: updatedData,
-      ));
+            id: widget.payments.id!,
+            data: updatedData,
+          ));
     }
 
     // Navigate back after saving
@@ -99,11 +106,13 @@ class _PaymentEditScreenState extends State<PaymentEditScreen> {
         }
       },
       child: Scaffold(
-        body: Column(
-          children: [
-            CustomAppBarWidget(title: 'Edit payment'),
-            Expanded(
-              child: Padding(
+        appBar: PreferredSize(
+            preferredSize: Size(double.infinity, height * 0.18),
+            child: CustomAppBarWidget(title: 'Edit payment')),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
                 padding: EdgeInsets.all(padding),
                 child: SingleChildScrollView(
                   child: Column(
@@ -114,7 +123,8 @@ class _PaymentEditScreenState extends State<PaymentEditScreen> {
                         onTap: () async {
                           final date = await datePicker(context);
                           if (date != null) {
-                            dueDateController.text = date.toString().substring(0, 10);
+                            dueDateController.text =
+                                date.toString().substring(0, 10);
                           }
                         },
                         child: AbsorbPointer(
@@ -165,8 +175,8 @@ class _PaymentEditScreenState extends State<PaymentEditScreen> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

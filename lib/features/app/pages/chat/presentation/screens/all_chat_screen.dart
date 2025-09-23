@@ -72,7 +72,7 @@ class AllChatScreen extends StatelessWidget {
                                       style: TextStyle(fontSize: 18, color: headingTextColor),
                                     ),
                                     SizedBox(
-                                      width: width * 0.64,
+                                      width: width * 0.62,
                                       child: Text(
                                         lastMessage,
                                         overflow: TextOverflow.ellipsis,

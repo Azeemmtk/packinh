@@ -340,6 +340,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           uid: firebaseUser.uid,
           name: name,
           email: email,
+          displayName: name,
           phone: phone,
           phoneVerified: true,
           emailVerified: firebaseUser.emailVerified,
