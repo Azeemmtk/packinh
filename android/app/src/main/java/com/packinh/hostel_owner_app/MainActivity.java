@@ -1,4 +1,4 @@
-package com.example.packinh;
+package com.packinh.hostel_owner_app;
 
 import io.flutter.embedding.android.FlutterActivity;
 

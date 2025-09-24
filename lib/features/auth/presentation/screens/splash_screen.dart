@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:packinh/core/constants/colors.dart';
 import 'package:packinh/core/constants/const.dart';
 import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import 'package:packinh/features/app/Navigation/presentation/screen/main_screen.dart';
@@ -138,22 +139,24 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                   width: double.infinity,
                   child: Stack(
                     children: [
-                      Image.asset(
-                        'assets/images/Background.jpg',
-                        fit: BoxFit.cover,
+                      Container(
+                        // 'assets/images/Background.jpg',
+                        // fit: BoxFit.cover,
+
                         width: double.infinity,
                         height: double.infinity,
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.black.withOpacity(0.1),
-                              Colors.black.withOpacity(0.3),
-                            ],
-                          ),
+                          color: Colors.white
+                          // gradient: LinearGradient(
+                          //   begin: Alignment.topCenter,
+                          //   end: Alignment.bottomCenter,
+                          //   colors: [
+                          //     Colors.black.withOpacity(0.1),
+                          //     Colors.black.withOpacity(0.3),
+                          //   ],
+                          // ),
                         ),
                       ),
                     ],
@@ -185,7 +188,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
                                   child: Image.asset(
-                                    'assets/images/PackInh_l.png',
+                                    'assets/images/app_logo.png',
                                     height: 150,
                                     width: 150,
                                     fit: BoxFit.contain,
@@ -223,7 +226,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                                     textStyle: TextStyle(
                                       fontSize: MediaQuery.of(context).size.width * 0.08,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: mainColor,
                                       letterSpacing: 2,
                                       shadows: [
                                         Shadow(
@@ -251,7 +254,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                               style: GoogleFonts.poppins(
                                 textStyle: TextStyle(
                                   fontSize: MediaQuery.of(context).size.width * 0.045,
-                                  color: Colors.white.withOpacity(0.9),
+                                  color: mainColor,
                                   fontWeight: FontWeight.w300,
                                   letterSpacing: 1,
                                   shadows: [
@@ -279,14 +282,14 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                                   Container(
                                     padding: const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.1),
+                                      color: secondaryColor,
                                       borderRadius: BorderRadius.circular(30),
                                     ),
                                     child: const SizedBox(
                                       width: 24,
                                       height: 24,
                                       child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                        valueColor: AlwaysStoppedAnimation<Color>(mainColor),
                                         strokeWidth: 2.5,
                                       ),
                                     ),
@@ -299,7 +302,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                                     style: GoogleFonts.poppins(
                                       textStyle: TextStyle(
                                         fontSize: MediaQuery.of(context).size.width * 0.035,
-                                        color: Colors.white.withOpacity(0.7),
+                                        color: mainColor,
                                         fontWeight: FontWeight.w300,
                                       ),
                                     ),
@@ -326,7 +329,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                           'Version 1.0.0',
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
-                              color: Colors.white.withOpacity(0.6),
+                              color: mainColor,
                               fontSize: 12,
                               fontWeight: FontWeight.w300,
                             ),

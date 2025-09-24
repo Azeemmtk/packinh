@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:152988047457:android:90bcc8defce025c833f220",
+        "mobilesdk_app_id": "1:152988047457:android:36b4f5f3509edd3433f220",
         "android_client_info": {
-          "package_name": "com.example.packinh"
+          "package_name": "com.packinh.hostel_owner_app"
         }
       },
       "oauth_client": [
@@ -43,17 +43,17 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:152988047457:android:5a075169aa09498f33f220",
+        "mobilesdk_app_id": "1:152988047457:android:78a3877ae235572e33f220",
         "android_client_info": {
-          "package_name": "com.example.packinn"
+          "package_name": "com.packinn.user_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "152988047457-8aeq1v08ns3nl6lgfs3v511u493rjg3r.apps.googleusercontent.com",
+          "client_id": "152988047457-efo80862m8pmd0ajghgmbtfjgg4aid6m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.packinn",
+            "package_name": "com.packinn.user_app",
             "certificate_hash": "2c1374c83edeff25b3e5e82ee1f1da8d84e274ac"
           }
         },
