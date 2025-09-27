@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../../../../../../auth/data/model/user_model.dart';
+import '../../../../../../../core/model/user_model.dart';
 
 class ProfileImageSection extends StatelessWidget {
   final UserModel user;

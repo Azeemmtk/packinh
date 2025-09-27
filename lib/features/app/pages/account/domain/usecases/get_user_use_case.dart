@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../../../core/error/failures.dart';
 import '../../../../../../core/usecases/usecase.dart';
-import '../../../../../auth/data/model/user_model.dart';
+import '../../../../../../core/model/user_model.dart';
 import '../repository/user_profile_repository.dart';
 
 class GetUserUseCase implements UseCase<UserModel, String> {

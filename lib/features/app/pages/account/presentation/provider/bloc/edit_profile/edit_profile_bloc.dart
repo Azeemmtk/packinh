@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../../../../../auth/data/model/user_model.dart';
+import '../../../../../../../../core/model/user_model.dart';
 import '../../../../domain/usecases/update_user_use_case.dart';
 
 part 'edit_profile_event.dart';

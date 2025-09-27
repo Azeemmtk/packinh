@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../../../core/error/exceptions.dart';
 import '../../../../../../core/error/failures.dart';
-import '../../../../../auth/data/model/user_model.dart';
+import '../../../../../../core/model/user_model.dart';
 import '../../domain/repository/user_profile_repository.dart';
 import '../datasource/user_profile_remote_data_source.dart';
 

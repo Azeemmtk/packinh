@@ -4,7 +4,7 @@ import 'package:packinh/features/app/pages/account/presentation/widgets/profile_
 import '../../../../../../core/constants/colors.dart';
 import '../../../../../../core/constants/const.dart';
 import '../../../../../../core/widgets/details_row_widget.dart';
-import '../../../../../auth/data/model/user_model.dart';
+import '../../../../../../core/model/user_model.dart';
 import '../provider/bloc/profile/profile_bloc.dart';
 import '../../../../../../core/services/current_user.dart';
 import '../screens/edit_profile_Screen.dart';

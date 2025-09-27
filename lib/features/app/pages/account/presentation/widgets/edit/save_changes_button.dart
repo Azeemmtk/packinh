@@ -7,7 +7,7 @@ import 'package:packinh/core/widgets/custom_snack_bar.dart';
 import '../../../../../../../core/constants/colors.dart';
 import '../../../../../../../core/constants/const.dart';
 import '../../../../../../../core/services/cloudinary_services.dart';
-import '../../../../../../auth/data/model/user_model.dart';
+import '../../../../../../../core/model/user_model.dart';
 import '../../provider/bloc/edit_profile/edit_profile_bloc.dart';
 
 class SaveChangesButton extends StatelessWidget {

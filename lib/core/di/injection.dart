@@ -35,14 +35,19 @@ import 'package:packinh/features/app/pages/chat/domain/usecases/get_owner_detail
 import 'package:packinh/features/app/pages/chat/domain/usecases/send_message_use_case.dart';
 import 'package:packinh/features/app/pages/home/data/datasource/dashboard_remote_data_source.dart';
 import 'package:packinh/features/app/pages/home/data/datasource/room%20_availability_remote_data_source.dart';
+import 'package:packinh/features/app/pages/home/data/datasource/user_details_remote_data_source.dart';
 import 'package:packinh/features/app/pages/home/data/repository/dashboard_repository_impl.dart';
 import 'package:packinh/features/app/pages/home/data/repository/room_availability_repository_impl.dart';
+import 'package:packinh/features/app/pages/home/data/repository/user_details_repository_impl.dart';
 import 'package:packinh/features/app/pages/home/domain/repository/dashboard_repository.dart';
 import 'package:packinh/features/app/pages/home/domain/repository/room_availability_repository.dart';
+import 'package:packinh/features/app/pages/home/domain/repository/user_details_repository.dart';
 import 'package:packinh/features/app/pages/home/domain/usecases/fetch_dashboard_data_use_cases.dart';
 import 'package:packinh/features/app/pages/home/domain/usecases/fetch_room_availability_use_case.dart';
+import 'package:packinh/features/app/pages/home/domain/usecases/get_user_details_use_case.dart';
 import 'package:packinh/features/app/pages/home/presentation/provider/bloc/dashboard/dashboard_bloc.dart';
 import 'package:packinh/features/app/pages/home/presentation/provider/bloc/roomavailability/room_availability_bloc.dart';
+import 'package:packinh/features/app/pages/home/presentation/provider/bloc/userdetails/user_details_bloc.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/dataSourse/review_remote_data_source.dart';
 import 'package:packinh/features/app/pages/my_hostel/data/repository/review_repository_impl.dart';
 import 'package:packinh/features/app/pages/my_hostel/domain/repository/review_repository.dart';
@@ -167,6 +172,10 @@ Future<void> initializeDependencies() async {
         () => ExpenseRemoteDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
   );
 
+  getIt.registerLazySingleton<UserDetailsRemoteDataSource>(
+        () => UserDetailsRemoteDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
+  );
+
   /// Repositories
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(remoteDataSource: getIt<AuthRemoteDataSource>()),
@@ -213,6 +222,9 @@ Future<void> initializeDependencies() async {
         () => ExpenseRepositoryImpl(getIt<ExpenseRemoteDataSource>()),
   );
 
+  getIt.registerLazySingleton<UserDetailsRepository>(
+        () => UserDetailsRepositoryImpl(getIt<UserDetailsRemoteDataSource>()),
+  );
 
 
 
@@ -275,7 +287,8 @@ Future<void> initializeDependencies() async {
   getIt.registerLazySingleton(() => FetchExpensesUseCase( getIt<ExpenseRepository>()),);
   getIt.registerLazySingleton(() => FetchHostelsUseCase( getIt<ExpenseRepository>()),);
 
-
+  //get user
+  getIt.registerLazySingleton(() => GetUserDetailsUseCase( getIt<UserDetailsRepository>()),);
 
 
 
@@ -364,6 +377,11 @@ Future<void> initializeDependencies() async {
     fetchExpensesUseCase: getIt<FetchExpensesUseCase>(),
     fetchHostelsUseCase: getIt<FetchHostelsUseCase>(),
   ));
+
+  //user details
+  getIt.registerFactory(() => UserDetailsBloc(
+      userDetailsUseCase: getIt<GetUserDetailsUseCase>()
+      ));
 
 
 

@@ -7,7 +7,7 @@ import 'package:packinh/features/app/pages/account/presentation/widgets/edit/sav
 import '../../../../../../../core/constants/const.dart';
 import '../../../../../../../core/services/image_picker_service.dart';
 import '../../../../../../../core/widgets/custom_text_field_widget.dart';
-import '../../../../../../auth/data/model/user_model.dart';
+import '../../../../../../../core/model/user_model.dart';
 import 'edit_profile_section.dart';
 
 class EditProfileForm extends StatefulWidget {
